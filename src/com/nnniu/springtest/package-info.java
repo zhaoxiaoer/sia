@@ -5,4 +5,4 @@
  * @author zhaoqinghua
  *
  */
-package cn.qiant.springtest;
+package com.nnniu.springtest;

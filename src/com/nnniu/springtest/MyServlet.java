@@ -1,4 +1,4 @@
-package cn.qiant.springtest;
+package com.nnniu.springtest;
 
 import java.io.IOException;
 import java.io.PrintWriter;
