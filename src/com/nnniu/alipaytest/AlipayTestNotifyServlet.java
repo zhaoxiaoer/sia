@@ -13,10 +13,6 @@ import com.alipay.api.internal.util.AlipaySignature;
 
 public class AlipayTestNotifyServlet extends HttpServlet{
 	
-	public static final String CHARSET = "UTF-8";
-	
-	public static final String ALIPAY_PUBLIC_KEY = "";
-	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		Map<String, String> params = new HashMap<String, String>();
@@ -33,7 +29,8 @@ public class AlipayTestNotifyServlet extends HttpServlet{
 			params.put(name,  valueStr);
 		}
 		try {
-			boolean flag = AlipaySignature.rsaCheckV1(params, ALIPAY_PUBLIC_KEY, CHARSET, "RSA");
+			boolean flag = AlipaySignature.rsaCheckV1(params, AlipayTestConfig.ALIPAY_PUBLIC_KEY, 
+					AlipayTestConfig.CHARSET, "RSA");
 			System.out.println("flag: " + flag);
 		} catch (AlipayApiException e) {
 			// TODO Auto-generated catch block

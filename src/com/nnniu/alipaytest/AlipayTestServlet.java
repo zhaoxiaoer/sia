@@ -16,26 +16,13 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 
 public class AlipayTestServlet extends HttpServlet {
-	
-	/**
-     * 用于支付宝支付业务的入参 app_id
-     */
-    public static final String APPID = "";
-    
-    /**
-     * pkcs8 格式的商户私钥
-     */
-    public static final String APP_PRIVATE_KEY = "";
-	
-    public static final String CHARSET = "UTF-8";
-    
-    public static final String ALIPAY_PUBLIC_KEY = "";
     
     private AlipayClient alipayClient;
     
 	public void init() throws ServletException {
 		alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
-				APPID, APP_PRIVATE_KEY, "json", CHARSET, ALIPAY_PUBLIC_KEY, "RSA");
+				AlipayTestConfig.APPID, AlipayTestConfig.APP_PRIVATE_KEY, "json", 
+				AlipayTestConfig.CHARSET, AlipayTestConfig.ALIPAY_PUBLIC_KEY, "RSA");
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -51,7 +38,7 @@ public class AlipayTestServlet extends HttpServlet {
 		model.setTotalAmount("0.02");
 		model.setProductCode("QUICK_MSECURITY_PAY");
 		alipayTradeAppPayRequest.setBizModel(model);
-		alipayTradeAppPayRequest.setNotifyUrl("http://xx.xxx.xxx.xxx/sia/apiPay/alipayNotify");
+		alipayTradeAppPayRequest.setNotifyUrl(AlipayTestConfig.ALIPAY_NOTIFY_URL);
 		
 		String orderString = "";
 		try {
