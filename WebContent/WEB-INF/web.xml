@@ -45,4 +45,21 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>AlipayTestServlet</servlet-name>
+    <servlet-class>com.nnniu.alipaytest.AlipayTestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AlipayTestServlet</servlet-name>
+    <url-pattern>/alipaytest</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AlipayTestNotifyServlet</servlet-name>
+    <servlet-class>com.nnniu.alipaytest.AlipayTestNotifyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AlipayTestNotifyServlet</servlet-name>
+    <url-pattern>/apiPay/alipayNotify</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
