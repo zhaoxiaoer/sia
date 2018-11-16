@@ -15,6 +15,12 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 
+/**
+ * 支付宝订单生成
+ * 
+ * @author zhaoqinghua
+ *
+ */
 public class AlipayTestServlet extends HttpServlet {
     
     private AlipayClient alipayClient;

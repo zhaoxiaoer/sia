@@ -11,6 +11,12 @@ import javax.servlet.http.*;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 
+/**
+ * 支付宝付款异步通知
+ * 
+ * @author zhaoqinghua
+ *
+ */
 public class AlipayTestNotifyServlet extends HttpServlet{
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) 

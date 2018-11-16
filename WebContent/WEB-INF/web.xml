@@ -72,4 +72,13 @@
     <url-pattern>/apiPay/alipayRefund</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>AlipayTestTransServlet</servlet-name>
+    <servlet-class>com.nnniu.alipaytest.AlipayTestTransServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AlipayTestTransServlet</servlet-name>
+    <url-pattern>/apiPay/alipayTrans</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

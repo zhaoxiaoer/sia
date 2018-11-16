@@ -14,6 +14,12 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 
+/**
+ * 支付宝退款测试
+ * 
+ * @author zhaoqinghua
+ *
+ */
 public class AlipayTestRefundServlet extends HttpServlet {
 	
 	private AlipayClient alipayClient;
