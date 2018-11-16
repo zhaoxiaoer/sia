@@ -53,6 +53,7 @@
     <servlet-name>AlipayTestServlet</servlet-name>
     <url-pattern>/alipaytest</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <servlet-name>AlipayTestNotifyServlet</servlet-name>
     <servlet-class>com.nnniu.alipaytest.AlipayTestNotifyServlet</servlet-class>
@@ -60,6 +61,15 @@
   <servlet-mapping>
     <servlet-name>AlipayTestNotifyServlet</servlet-name>
     <url-pattern>/apiPay/alipayNotify</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AlipayTestRefundServlet</servlet-name>
+    <servlet-class>com.nnniu.alipaytest.AlipayTestRefundServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AlipayTestRefundServlet</servlet-name>
+    <url-pattern>/apiPay/alipayRefund</url-pattern>
   </servlet-mapping>
   
 </web-app>

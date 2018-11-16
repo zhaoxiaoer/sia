@@ -15,6 +15,9 @@ public class AlipayTestNotifyServlet extends HttpServlet{
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
+		System.out.println("Method: " + request.getMethod());
+		System.out.println("Content-Type: " + request.getContentType());
+		
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
 		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
