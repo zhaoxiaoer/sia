@@ -18,5 +18,5 @@ public class AlipayTestConfig {
     /**
      * 异步通知地址
      */
-    public static final String ALIPAY_NOTIFY_URL = "";
+    public static final String ALIPAY_NOTIFY_URL = "http://39.107.64.191/sia/apiPay/alipayNotify";
 }
