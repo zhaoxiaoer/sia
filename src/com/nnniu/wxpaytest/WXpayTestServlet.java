@@ -129,8 +129,8 @@ public class WXpayTestServlet extends HttpServlet {
 //		keyValues.put("attach", "zhao 支付测试");
 		keyValues.put("out_trade_no", outTradeNo);
 		keyValues.put("total_fee", Integer.toString(2));
-//		keyValues.put("spbill_create_ip", realIP);
-		keyValues.put("spbill_create_ip", "125.46.217.7");
+		keyValues.put("spbill_create_ip", realIP);
+//		keyValues.put("spbill_create_ip", "125.46.217.7");
 		keyValues.put("notify_url", WXpayTestConfig.WXPAY_NOTIFY_URL);
 		keyValues.put("trade_type", "APP");
 		
