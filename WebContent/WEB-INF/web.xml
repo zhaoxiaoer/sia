@@ -45,13 +45,14 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
   
+  <!-- alipay test -->
   <servlet>
     <servlet-name>AlipayTestServlet</servlet-name>
     <servlet-class>com.nnniu.alipaytest.AlipayTestServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>AlipayTestServlet</servlet-name>
-    <url-pattern>/alipaytest</url-pattern>
+    <url-pattern>/apiPay/alipaytest</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -79,6 +80,35 @@
   <servlet-mapping>
     <servlet-name>AlipayTestTransServlet</servlet-name>
     <url-pattern>/apiPay/alipayTrans</url-pattern>
+  </servlet-mapping>
+  
+  <!-- wxpay test -->
+  <servlet>
+    <servlet-name>WXpayTestServlet</servlet-name>
+    <servlet-class>com.nnniu.wxpaytest.WXpayTestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WXpayTestServlet</servlet-name>
+    <url-pattern>/apiPay/wxpaytest</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>WXpayTestNotifyServlet</servlet-name>
+    <servlet-class>com.nnniu.wxpaytest.WXpayTestNotifyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WXpayTestNotifyServlet</servlet-name>
+    <url-pattern>/apiPay/wxpayNotify</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Beginning Spring Demo -->
+  <servlet>
+    <servlet-name>JavaConfigDemo</servlet-name>
+    <servlet-class>com.nnniu.bs.ch2.JavaConfigDemo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JavaConfigDemo</servlet-name>
+    <url-pattern>/bs/ch2/JavaConfigDemo</url-pattern>
   </servlet-mapping>
   
 </web-app>
