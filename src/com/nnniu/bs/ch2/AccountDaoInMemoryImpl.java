@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class AccountDaoInMemoryImpl implements AccountDao {
 
 	private Map<Long, Account> accountsMap = new HashMap<>();

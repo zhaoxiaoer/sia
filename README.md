@@ -15,3 +15,16 @@ export JAVA_HOME CLASSPATH PATH  <br>
 下载apache-tomcat-9.0.13.tar.gz，并解压<br>
 cd apache-tomcat-9.0.13<br>
 ./bin/startup.sh 启动tomcat
+
+## jar文件说明
+### 阿里支付相关jar
+alipay-sdk-java-3.3.2.jar, commons-logging-1.1.1.jar
+
+### http客户端相关jar
+httpclient-4.5.6.jar, httpcore-4.4.10.jar
+
+### json相关jar
+fastjson-1.2.51.jar
+
+### xml解析相关jar
+dom4j-2.1.1.jar, jaxen-1.1.6.jar
