@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 	private AccountDao accountDao;
 	
+//	public AccountServiceImpl(AccountDao accountDao) {
+//		this.accountDao = accountDao;
+//	}
+	
 	@Autowired
 	public void setAccountDao(AccountDao accountDao) {
 		this.accountDao = accountDao;

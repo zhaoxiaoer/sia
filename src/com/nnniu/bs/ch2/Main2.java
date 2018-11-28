@@ -23,6 +23,10 @@ public class Main2 {
 				accountService.getAccount(1).getBalance());
 		System.out.println("Account 2 balance: " +
 				accountService.getAccount(2).getBalance());
+		
+		Account account1 = applicationContext.getBean("account1", Account.class);
+		System.out.println("account1: " + account1.getOwnerName() + 
+				", balance: " + account1.getBalance());
 	}
 	
 }

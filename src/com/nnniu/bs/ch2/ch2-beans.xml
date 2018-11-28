@@ -5,10 +5,17 @@
                         http://www.springframework.org/schema/beans/spring-beans.xsd">
   
   <bean id="accountService" class="com.nnniu.bs.ch2.AccountServiceImpl">
+    <!-- <constructor-arg ref="accountDao" /> -->
     <property name="accountDao" ref="accountDao" />
   </bean>
   
   <bean id="accountDao" class="com.nnniu.bs.ch2.AccountDaoInMemoryImpl">
+  </bean>
+  
+  <bean id="account1" class="com.nnniu.bs.ch2.Account">
+    <property name="id" value="1" />
+    <property name="ownerName" value="John" />
+    <property name="balance" value="10.0" />
   </bean>
   
 </beans>
