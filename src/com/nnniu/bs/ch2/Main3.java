@@ -16,13 +16,18 @@ public class Main3 {
 		System.out.println("Account 2 balance: " +
 				accountService.getAccount(2).getBalance());
 		
-		accountService.transferMoney(1, 2, 3.0);
+		accountService.transferMoney(1, 2, 2.0);
 		
 		System.out.println("After money transfer");
 		System.out.println("Account 1 balance: " +
 				accountService.getAccount(1).getBalance());
 		System.out.println("Account 2 balance: " +
 				accountService.getAccount(2).getBalance());
+		
+		String[] beans = applicationContext.getBeanDefinitionNames();
+		for (String bean : beans) {
+			System.out.println("name: " + bean + ", type: " + applicationContext.getType(bean));
+		}
 	}
 	
 }

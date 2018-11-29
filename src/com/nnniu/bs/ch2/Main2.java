@@ -27,6 +27,11 @@ public class Main2 {
 		Account account1 = applicationContext.getBean("account1", Account.class);
 		System.out.println("account1: " + account1.getOwnerName() + 
 				", balance: " + account1.getBalance());
+		
+		String[] beans = applicationContext.getBeanDefinitionNames();
+		for (String bean : beans) {
+			System.out.println("name: " + bean + ", type: " + applicationContext.getType(bean));
+		}
 	}
 	
 }

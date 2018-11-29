@@ -1,6 +1,8 @@
 package com.nnniu.bs.ch2;
 
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +14,7 @@ public class AccountServiceImpl implements AccountService {
 //	}
 	
 	@Autowired
+	@Qualifier(value="accountDaoInMemoryImpl")
 	public void setAccountDao(AccountDao accountDao) {
 		this.accountDao = accountDao;
 	}
