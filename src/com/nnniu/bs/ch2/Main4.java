@@ -9,6 +9,11 @@ public class Main4 {
 				new AnnotationConfigApplicationContext(Configuration1.class, Configuration2.class);
 		Foo foo = applicationContext.getBean("foo", Foo.class);
 		System.out.println(foo.getName());
+		
+		String[] names = applicationContext.getBeanDefinitionNames();
+		for (String name : names) {
+			System.out.println("name: " + name + ", type: " + applicationContext.getType(name));
+		}
 	}
 
 }
