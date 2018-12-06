@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance http://www.springmodules.org/schema/cache/springmodules-cache.xsd http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>sia</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
@@ -42,7 +42,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>MyServlet</servlet-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/index.html</url-pattern>
   </servlet-mapping>
   
   <!-- alipay test -->
@@ -101,7 +101,7 @@
     <url-pattern>/apiPay/wxpayNotify</url-pattern>
   </servlet-mapping>
   
-  <!-- Beginning Spring Demo -->
+  <!-- Beginning Spring Demo begin-->
   <servlet>
     <servlet-name>JavaConfigDemo</servlet-name>
     <servlet-class>com.nnniu.bs.ch2.JavaConfigDemo</servlet-class>
@@ -110,5 +110,20 @@
     <servlet-name>JavaConfigDemo</servlet-name>
     <url-pattern>/bs/ch2/JavaConfigDemo</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/config/springmvc-servlet.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>*.mvc</url-pattern>
+  </servlet-mapping>
+  <!-- Beginning Spring Demo end -->
   
 </web-app>
