@@ -12,9 +12,19 @@ public class UserController {
 	
 	@RequestMapping(value="/form")
 	public ModelAndView user() {
-		ModelAndView modelAndView = new ModelAndView("userForm", "user", new User());
-//		modelAndView.addObject("genders", "aaa");
-//		modelAndView.addObject("countries", countries);
+		User user = new User();
+		user.setName("zhao");
+		ModelAndView modelAndView = new ModelAndView("userForm", "user", user);
+		modelAndView.addObject("genders", Gender.values());
+		modelAndView.addObject("countries", countries);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/result")
+	public ModelAndView processUser(User user) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("userResult");
+		modelAndView.addObject("u", user);
 		return modelAndView;
 	}
 
