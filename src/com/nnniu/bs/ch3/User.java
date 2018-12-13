@@ -2,12 +2,20 @@ package com.nnniu.bs.ch3;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class User {
+	@MyConstraint(message="name必须为MAIL")
 	private String name;
+	@NotNull(message="lastname不能为空")
 	private String lastname;
+	@Length(min=8, max=18, message="密码长度必须为8-18")
 	private String password;
+	@NotNull(message="详情不能为空")
+	@Length(min=8, max=18, message="详情长度必须为8-18")
 	private String detail;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private LocalDate birthDate;
