@@ -28,3 +28,7 @@ fastjson-1.2.51.jar
 
 ### xml解析相关jar
 dom4j-2.1.1.jar, jaxen-1.1.6.jar
+
+### 自定义 约束校验注解，以及 Hibernate 约束校验注解
+validation-api-2.0.1.Final.jar  依赖  hibernate-validator-6.0.13.Final.jar <br />
+hibernate-validator-6.0.13.Final.jar  又依赖  jboss-logging-3.3.2.Final.jar、javax.el-3.0.1-b09.jar、classmate-1.3.4.jar
