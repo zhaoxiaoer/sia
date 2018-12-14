@@ -12,35 +12,35 @@
   <table>
     <tr>
       <td>Name</td>
-      <td>${ u.name }</td>
+      <td>${ user.name }</td>
     </tr>
     <tr>
       <td>Last name</td>
-      <td>${ u.lastname }</td>
+      <td>${ user.lastname }</td>
     </tr>
     <tr>
       <td>Password</td>
-      <td>${ u.password }</td>
+      <td>${ user.password }</td>
     </tr>
     <tr>
       <td>Detail</td>
-      <td>${ u.detail }</td>
+      <td>${ user.detail }</td>
     </tr>
     <tr>
       <td>Birth Date</td>
-      <td>${ u.birthDate }</td>
+      <td>${ user.birthDate }</td>
     </tr>
     <tr>
       <td>Gender</td>
-      <td>${ u.gender }</td>
+      <td>${ user.gender }</td>
     </tr>
     <tr>
       <td>Country</td>
-      <td>${ u.country }</td>
+      <td>${ user.country }</td>
     </tr>
     <tr>
       <td>Non-Smoking</td>
-      <td>${ u.nonSmoking }</td>
+      <td>${ user.nonSmoking }</td>
     </tr>
   </table>
 </body>

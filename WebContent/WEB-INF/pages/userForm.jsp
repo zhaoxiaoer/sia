@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+  .formFieldError { background-color: #FFC; }
+</style>
 </head>
 <body>
 
@@ -14,19 +17,23 @@
     <table>
       <tr>
         <td><mvc:label path="name">Name</mvc:label></td>
-        <td><mvc:input path="name" /></td>
+        <td><mvc:input path="name" cssErrorClass="formFieldError"/></td>
+        <td><mvc:errors path="name" /></td>
       </tr>
       <tr>
         <td><mvc:label path="lastname">Last Name</mvc:label></td>
-        <td><mvc:input path="lastname" /></td>
+        <td><mvc:input path="lastname" cssErrorClass="formFieldError"/></td>
+        <td><mvc:errors path="lastname" /></td>
       </tr>
       <tr>
         <td><mvc:label path="password">Password</mvc:label></td>
-        <td><mvc:password path="password" /></td>
+        <td><mvc:password path="password" cssErrorClass="formFieldError" /></td>
+        <td><mvc:errors path="password" /></td>
       </tr>
       <tr>
         <td><mvc:label path="detail">Detail</mvc:label></td>
-        <td><mvc:textarea path="detail" /></td>
+        <td><mvc:textarea path="detail" cssErrorClass="formFieldError" /></td>
+        <td><mvc:errors path="detail" /></td>
       </tr>
       <tr>
         <td><mvc:label path="birthDate">BirthDate</mvc:label></td>
