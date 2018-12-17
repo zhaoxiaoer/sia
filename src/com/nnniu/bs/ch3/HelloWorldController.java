@@ -45,4 +45,21 @@ public class HelloWorldController implements ApplicationContextAware {
 		return mv;
 	}
 	
+	@RequestMapping(value="/beans")
+	public ModelAndView getBeans() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("beans");
+		
+		String[] names = applicationContext.getBeanDefinitionNames();
+		StringBuilder builder = new StringBuilder();
+		for (String name : names) {
+//			System.out.println("name: " + name + ", type: " + webApplicationContext.getType(name));
+//			System.out.println("name: " + name + ", type: ");
+			builder.append("name: " + name + ", type: " + "<br />");
+		}
+		modelAndView.addObject("beans", builder.toString());
+		
+		return modelAndView;
+	}
+	
 }
