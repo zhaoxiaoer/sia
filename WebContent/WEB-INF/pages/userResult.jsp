@@ -42,6 +42,10 @@
       <td>Non-Smoking</td>
       <td>${ user.nonSmoking }</td>
     </tr>
+    <tr>
+      <td>Profile Photo</td>
+      <td>${ user.file }</td>
+    </tr>
   </table>
 </body>
 </html>

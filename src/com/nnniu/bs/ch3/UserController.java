@@ -1,5 +1,7 @@
 package com.nnniu.bs.ch3;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,9 @@ public class UserController {
 	
 	private static final String[] countries = { "Turkey", 
 			"United States", "Germany" };
+	
+	@Autowired
+	private HttpServletRequest request;
 	
 	@RequestMapping(value="/form")
 	public ModelAndView user(HttpServletRequest request) {
@@ -57,6 +63,7 @@ public class UserController {
 	public ModelAndView processUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("user", user);
+		modelAndView.addObject("countries", countries);
 		
 		if (bindingResult.hasErrors()) {
 			List<ObjectError> errorList = bindingResult.getAllErrors();
@@ -66,6 +73,18 @@ public class UserController {
 			modelAndView.setViewName("userForm");
 		} else {
 			modelAndView.setViewName("userResult");
+		}
+		
+		try {
+			String filePath = request.getSession().getServletContext().getRealPath("/") + "/WEB-INF/uploads/" + user.getFile().getOriginalFilename();
+			System.out.println("filePath: " + filePath);
+			user.getFile().transferTo(new File(filePath));
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return modelAndView;

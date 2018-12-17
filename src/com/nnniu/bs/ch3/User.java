@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 public class User {
 	@MyConstraint(message="name必须为MAIL")
@@ -22,6 +23,7 @@ public class User {
 	private String country;
 	private Gender gender;
 	private boolean nonSmoking;
+	private MultipartFile file;
 	
 	public String getName() {
 		return name;
@@ -70,5 +72,11 @@ public class User {
 	}
 	public void setNonSmoking(boolean nonSmoking) {
 		this.nonSmoking = nonSmoking;
+	}
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 }

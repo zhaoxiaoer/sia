@@ -52,6 +52,10 @@
         <td><mvc:checkbox path="nonSmoking" /></td>
       </tr>
       <tr>
+        <td><mvc:label path="file">Profile Photo</mvc:label></td>
+        <td><mvc:input path="file" type="file" /></td>
+      </tr>
+      <tr>
         <td colspan="2">
           <input type="submit" value="Submit" />
         </td>
