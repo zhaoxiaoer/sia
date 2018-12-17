@@ -13,7 +13,7 @@
 <body>
 
 <h2>User Registration</h2>
-<mvc:form modelAttribute="user" action="result.mvc">
+<mvc:form modelAttribute="user" action="result.mvc" enctype="multipart/form-data">
     <table>
       <tr>
         <td><mvc:label path="name">Name</mvc:label></td>
