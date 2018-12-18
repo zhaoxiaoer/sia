@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,9 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/result")
-	public ModelAndView processUser(@Valid User user, BindingResult bindingResult) {
+	public ModelAndView processUser(@Valid User user, BindingResult bindingResult) throws Exception {
+		System.out.println("URI: " + request.getRequestURI());
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("user", user);
 		modelAndView.addObject("countries", countries);
@@ -72,20 +75,25 @@ public class UserController {
 			modelAndView.setViewName("userForm");
 		} else {
 			modelAndView.setViewName("userResult");
-		}
-		
-		System.out.println("URI: " + request.getRequestURI());
-		
-		try {
-			String filePath = request.getSession().getServletContext().getRealPath("/") + "/WEB-INF/uploads/" + user.getFile().getOriginalFilename();
-			System.out.println("filePath: " + filePath);
-			user.getFile().transferTo(new File(filePath));
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			if (!user.getPassword().equals("11111111")) {
+				throw new UserNotFoundException("用户密码错误");
+			}
+			
+			if (!user.getFile().getOriginalFilename().equals("")) {
+				try {
+					System.out.println("copy profile photo");
+					String filePath = request.getSession().getServletContext().getRealPath("/") + "/WEB-INF/uploads/" + user.getFile().getOriginalFilename();
+					System.out.println("filePath: " + filePath);
+					user.getFile().transferTo(new File(filePath));
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return modelAndView;
@@ -95,6 +103,13 @@ public class UserController {
 	public ModelAndView testPathVariable(@PathVariable("name") String n) {
 		ModelAndView modelAndView = new ModelAndView("testPathVariable");
 		
+		return modelAndView;
+	}
+	
+	@ExceptionHandler
+	public ModelAndView handleException(UserNotFoundException e) {
+		ModelAndView modelAndView = new ModelAndView("errorUser");
+		modelAndView.addObject("errorMessage", e.getMessage());
 		return modelAndView;
 	}
 
