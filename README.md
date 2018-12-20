@@ -37,3 +37,7 @@ hibernate-validator-6.0.13.Final.jar  又依赖  jboss-logging-3.3.2.Final.jar�
 form表单，默认的编码格式为 application/x-www-form-urlencoded <br />
 通过添加 multipartResolver bean，spring 可以支持 multipart/form-data 编码格式 <br />
 相关jar: commons-fileupload-1.3.3.jar, 该包又依赖于 commons-io-2.6.jar
+
+### jdbc相关jar包
+Spring JDBC 扩展自 jdbc, 因此要想使用Spring JDBC，必须添加 mysql-connector-java-8.0.12.jar <br />
+一般情况下，创建数据库连接所消耗的时间大于SQL执行的时间，因此要使用缓冲池: c3p0-0.9.5.2.jar、mchange-commons-java-0.2.11.jar
