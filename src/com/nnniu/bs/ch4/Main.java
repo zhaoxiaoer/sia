@@ -2,6 +2,9 @@ package com.nnniu.bs.ch4;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -49,6 +52,34 @@ public class Main {
 		System.out.println("accountDao.jdbcTemplate: " + accountDao.getJdbcTemplate() + ", jdbcTemplate: " + jdbcTemplate);
 		
 		System.out.println("dataSource: " + dataSource + ", jdbcTemplate.getDataSource: "  + jdbcTemplate.getDataSource());
+		
+		// 调试 Spring JDBC
+		Account account = accountDao.find(100L);
+		System.out.println(account);
+		
+		Account account2 = accountDao.find("john doe").get(0);
+		System.out.println(account2);
+		
+		Account account3 = new Account();
+		account3.setOwnerName("zhaoxiaoer");
+		account3.setBalance(100);
+		account3.setAccessTime(new Date());
+		account3.setLocked(false);
+		
+		accountDao.insert(account3);
+		
+		Account account4 = accountDao.find(account3.getId());
+		System.out.println("account4: " + account4);
+		
+		account4.setBalance(101.1);
+		accountDao.update(account4);
+		
+		account4 = accountDao.find(account4.getId());
+		System.out.println("account4: " + account4);
+		
+		accountDao.delete(account4.getId());
+		List<Account> accounts = accountDao.find(Arrays.asList(account.getId()));
+		System.out.println(accounts.size());
 	}
 	
 }

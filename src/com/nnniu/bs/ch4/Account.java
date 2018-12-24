@@ -38,4 +38,11 @@ public class Account {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+	
+	@Override
+	public String toString() {
+		return "Account, id: " + id + ", ownerName: " + ownerName 
+				+ ", balance: " + balance + ", accessTime: " + accessTime
+				+ ", locked: " + locked;
+	}
 }
