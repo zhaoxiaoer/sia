@@ -1,9 +1,12 @@
 package com.nnniu.wxmp;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -12,30 +15,43 @@ import java.util.Set;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+
+import com.nnniu.wxmp.msgandevent.CommonXML;
+import com.nnniu.wxmp.msgandevent.ImageMessage;
+import com.nnniu.wxmp.msgandevent.TextMessage;
 
 // @RestController 等价于 @Controller + @ResponseBody
 @Controller
 public class MPController {
 	
-	@RequestMapping(value="/wx", produces="text/plain; charset=UTF-8")
+	@Autowired
+	private Jaxb2Marshaller jaxb2Marshaller;
+	
+	@RequestMapping(method=RequestMethod.GET, value="/wx", produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String checkServer(HttpServletRequest request, 
 			String signature, String timestamp, String nonce, String echostr) {
 		// 打印HTTP
 		System.out.println(request.getMethod() + " " + request.getRequestURI() + 
-				" " + request.getProtocol() + "?" + request.getQueryString());
+				"?" + request.getQueryString() +
+				" " + request.getProtocol());
 		Enumeration<String> keys = request.getHeaderNames();
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			String value = request.getHeader(key);
 			System.out.println(key + ": " + value);
 		}
+		System.out.println("");
 		try {
 			ServletInputStream servletInputStream = request.getInputStream();
 			StringBuilder stringBuilder = new StringBuilder();
@@ -50,11 +66,57 @@ public class MPController {
 			e.printStackTrace();
 		}
 		
+		if (!checkSignature(signature, timestamp, nonce)) {
+			return "error";
+		}
+		
+		return echostr;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/wx", produces="application/xml; charset=UTF-8")
+	@ResponseBody
+	public String handleMessage(HttpServletRequest request, String signature, 
+			long timestamp, String nonce, String openid, @RequestBody String body) {
+		if (!checkSignature(signature, timestamp + "", nonce)) {
+			return "error";
+		}
+		if (body == null || body.equals("")) {
+			return "error";
+		}
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(": " + simpleDateFormat.format(new Date(timestamp * 1000)));
+//		System.out.println("origin body: " + body);
+		
+		// 根据 MsgType 字段替换根标签
+		if (body.indexOf("<MsgType><![CDATA[text]]></MsgType>") != -1) {
+			body = body.replace("<xml>", "<text>").replace("</xml>", "</text>");
+		} else if (body.indexOf("<MsgType><![CDATA[image]]></MsgType>") != -1) {
+			body = body.replace("<xml>", "<image>").replace("</xml>", "</image>");
+		} else {
+			return "error";
+		}
+		System.out.println(body);
+		
+		CommonXML message = (CommonXML) jaxb2Marshaller.unmarshal(
+				new StreamSource(new StringReader(body)));
+		System.out.println(message);
+				
+		// 回复
+		String to = message.getFromUserName();
+		message.setFromUserName(message.getToUserName());
+		message.setToUserName(to);
+		// 手动组装回复XML
+		String replyStr = replyMessage(message);
+		System.out.println("out: " + replyStr);
+		return replyStr;
+	}
+	
+	private boolean checkSignature(String signature, String timestamp, String nonce) {
 		if ((signature == null || signature.equals("")) 
 				|| (timestamp == null || timestamp.equals("")) 
-				|| (nonce == null || nonce.equals("")) 
-				|| (echostr == null || echostr.equals(""))) {
-			return "error";
+				|| (nonce == null || nonce.equals(""))) {
+			return false;
 		}
 		
 		Map<String, String> m = buildMap(timestamp, nonce);
@@ -62,16 +124,10 @@ public class MPController {
 		System.out.println("sign: " + sign);
 		System.out.println("sig2: " + signature);
 		if (!sign.equals(signature)) {
-			return "error";
+			return false;
 		}
 		
-		return echostr;
-		
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("wxmp");
-//		modelAndView.addObject("message", "1111");
-		
-//		return modelAndView;
+		return true;
 	}
 	
 	private Map<String, String> buildMap(String timestamp, String nonce) {
@@ -109,4 +165,26 @@ public class MPController {
 		return DigestUtils.sha1Hex(sb.toString().getBytes());
 	}
 	
+	private String replyMessage(CommonXML commonXML) {
+		// 公共信息
+		StringBuilder sb = new StringBuilder();
+		sb.append("<xml>");
+		sb.append("<ToUserName><![CDATA[" + commonXML.getToUserName() + "]]></ToUserName>");
+		sb.append("<FromUserName><![CDATA[" + commonXML.getFromUserName() + "]]></FromUserName>");
+		sb.append("<CreateTime>" + commonXML.getCreateTime() + "</CreateTime>");
+		sb.append("<MsgType><![CDATA[" + commonXML.getMsgType() + "]]></MsgType>");
+		
+		if (commonXML.getMsgType().equals("text")) {
+			TextMessage textMessage = (TextMessage) commonXML;
+			sb.append("<Content><![CDATA[" + textMessage.getContent() + "]]></Content>");
+		} else if (commonXML.getMsgType().equals("image")) {
+			ImageMessage imageMessage = (ImageMessage) commonXML;
+			sb.append("<Image><MediaId><![CDATA[" + imageMessage.getMediaId() + "]]></MediaId></Image>");
+		} else {
+			
+		}
+		
+		sb.append("</xml>");
+		return sb.toString();
+	}
 }

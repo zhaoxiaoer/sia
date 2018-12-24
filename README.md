@@ -41,3 +41,8 @@ form表单，默认的编码格式为 application/x-www-form-urlencoded <br />
 ### jdbc相关jar包
 Spring JDBC 扩展自 jdbc, 因此要想使用Spring JDBC，必须添加 mysql-connector-java-8.0.12.jar <br />
 一般情况下，创建数据库连接所消耗的时间大于SQL执行的时间，因此要使用缓冲池: c3p0-0.9.5.2.jar、mchange-commons-java-0.2.11.jar
+
+### OXM相关jar包
+使用 Spring 的 OXM 包，需要javax.activation-api-1.2.0.jar, jaxb-api-2.4.0-b180830.0359.jar <br />
+jaxb-core-2.3.0.1.jar, jaxb-impl-2.4.0-b180830.0438.jar, istack-commons-runtime-3.0.7.jar <br />
+当前仅使用 jaxb 的 marshal, unmarshal 时需要添加 CDATA, 所以暂时没有使用
