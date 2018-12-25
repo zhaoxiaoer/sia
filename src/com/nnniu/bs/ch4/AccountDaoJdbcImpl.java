@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +60,7 @@ public class AccountDaoJdbcImpl implements AccountDao {
 				PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, account.getOwnerName());
 				ps.setDouble(2, account.getBalance());
-				ps.setDate(3, new Date(account.getAccessTime().getTime()));
+				ps.setTimestamp(3, new Timestamp(account.getAccessTime().getTime()));
 				ps.setBoolean(4, account.isLocked());
 				return ps;
 			}
@@ -70,7 +71,7 @@ public class AccountDaoJdbcImpl implements AccountDao {
 	public void update(Account account) {
 		int count = jdbcTemplate.update("update account set owner_name = ?, balance = ?, access_time = ?, locked = ? where id = ?",
 				account.getOwnerName(), account.getBalance(),
-				account.getAccessTime(), account.isLocked(),
+				new Timestamp(account.getAccessTime().getTime()), account.isLocked(),
 				account.getId());
 		if (count != 1) {
 			throw new UpdateFailedException("Cannot update account");

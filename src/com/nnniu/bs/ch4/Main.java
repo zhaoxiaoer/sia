@@ -77,9 +77,9 @@ public class Main {
 		account4 = accountDao.find(account4.getId());
 		System.out.println("account4: " + account4);
 		
-		accountDao.delete(account4.getId());
-		List<Account> accounts = accountDao.find(Arrays.asList(account.getId()));
-		System.out.println(accounts.size());
+//		accountDao.delete(account4.getId());
+//		List<Account> accounts = accountDao.find(Arrays.asList(account.getId()));
+//		System.out.println(accounts.size());
 	}
 	
 }
