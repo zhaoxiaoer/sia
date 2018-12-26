@@ -46,3 +46,17 @@ Spring JDBC 扩展自 jdbc, 因此要想使用Spring JDBC，必须添加 mysql-c
 使用 Spring 的 OXM 包，需要javax.activation-api-1.2.0.jar, jaxb-api-2.4.0-b180830.0359.jar <br />
 jaxb-core-2.3.0.1.jar, jaxb-impl-2.4.0-b180830.0438.jar, istack-commons-runtime-3.0.7.jar <br />
 当前仅使用 jaxb 的 marshal, unmarshal 时需要添加 CDATA, 所以暂时没有使用
+
+### JPA相关jar包
+使用JPA，需要导入javax.persistence-api-2.2.jar，而该包又依赖于：<br />
+hibernate-core-5.3.7.Final.jar <br />
+dom4j-2.1.1.jar <br />
+javax.activation-api-1.2.0.jar <br />
+classmate-1.3.4.jar <br />
+jandex-2.0.5.Final.jar <br />
+jboss-transaction-api_1.2_spec-1.1.1.Final.jar <br />
+byte-buddy-1.8.17.jar <br />
+javassist-3.23.1-GA.jar <br />
+jboss-logging-3.3.2.Final.jar <br />
+hibernate-commons-annotations-5.0.4.Final.jar <br />
+antlr-2.7.7.jar <br />
