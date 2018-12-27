@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nnniu.wxmp.msgandevent.CommonXML;
 import com.nnniu.wxmp.msgandevent.ImageMessage;
 import com.nnniu.wxmp.msgandevent.TextMessage;
+import com.nnniu.wxmp.msgandevent.VoiceMessage;
 
 // @RestController 等价于 @Controller + @ResponseBody
 @Controller
@@ -93,14 +94,16 @@ public class MPController {
 			body = body.replace("<xml>", "<text>").replace("</xml>", "</text>");
 		} else if (body.indexOf("<MsgType><![CDATA[image]]></MsgType>") != -1) {
 			body = body.replace("<xml>", "<image>").replace("</xml>", "</image>");
+		} else if (body.indexOf("<MsgType><![CDATA[voice]]></MsgType>") != -1) {
+			body = body.replace("<xml>", "<voice>").replace("</xml>", "</voice>");
 		} else {
 			return "error";
 		}
-		System.out.println(body);
+		System.out.println("body: " + body);
 		
 		CommonXML message = (CommonXML) jaxb2Marshaller.unmarshal(
 				new StreamSource(new StringReader(body)));
-		System.out.println(message);
+		System.out.println("message: " + message);
 				
 		// 回复
 		String to = message.getFromUserName();
@@ -121,8 +124,8 @@ public class MPController {
 		
 		Map<String, String> m = buildMap(timestamp, nonce);
 		String sign = getSign2(m);
-		System.out.println("sign: " + sign);
-		System.out.println("sig2: " + signature);
+//		System.out.println("sign: " + sign);
+//		System.out.println("sig2: " + signature);
 		if (!sign.equals(signature)) {
 			return false;
 		}
@@ -161,7 +164,7 @@ public class MPController {
 		for (int i = 0; i < list.size(); i++) {
 			sb.append(list.get(i));
 		}
-		System.out.println("str: " + sb.toString());
+//		System.out.println("str: " + sb.toString());
 		return DigestUtils.sha1Hex(sb.toString().getBytes());
 	}
 	
@@ -181,7 +184,8 @@ public class MPController {
 			ImageMessage imageMessage = (ImageMessage) commonXML;
 			sb.append("<Image><MediaId><![CDATA[" + imageMessage.getMediaId() + "]]></MediaId></Image>");
 		} else {
-			
+			VoiceMessage voiceMessage = (VoiceMessage) commonXML;
+			sb.append("<Voice><MediaId><![CDATA[" + voiceMessage.getMediaId() + "]]></MediaId></Voice>");
 		}
 		
 		sb.append("</xml>");

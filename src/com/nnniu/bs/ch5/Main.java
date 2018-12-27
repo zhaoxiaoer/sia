@@ -17,8 +17,8 @@ public class Main {
 				Persistence.createEntityManagerFactory("test-jpa");
 		System.out.println(entityManagerFactory.isOpen());
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-//		EntityTransaction transaction = entityManager.getTransaction();
-//		transaction.begin();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
 		
 		// 保存
 //		Student student = new Student();
@@ -33,25 +33,30 @@ public class Main {
 //		entityManager.persist(student);
 		
 		// 更新，删除
-//		Student student = entityManager.find(Student.class, 1L);
-////		Book book2 = entityManager.getReference(Book.class, 2L);
-////		student.setFirstName("zhao");
-////		entityManager.remove(book2);
+		Student student = entityManager.find(Student.class, 1L);
+		Set<Book> books = student.getBooks();
+//		System.out.println("books: " + books.size());
+		Book book2 = entityManager.getReference(Book.class, 2L);
+		student.setFirstName("zhao");
+		entityManager.remove(book2);
 //		Set<Book> books = student.getBooks();
+//		System.out.println("books: " + books.size());
 //		Iterator<Book> iter = books.iterator();
-////		student.getBooks().remove(iter.next());
+//		student.getBooks().remove(iter.next());
 //		((Book) iter.next()).setName("update book");
 		
-//		transaction.commit();
+		transaction.commit();
+		
+		System.out.println("2 books: " + books.size());
 		
 		// 使用JPA QL查询数据库
-		Query query = entityManager.createQuery(
-				"select s from Student s where s.firstName like ?1");
-		query.setParameter(1, "Jo%");
-		List<Student> students = query.getResultList();
-		Student s = students.get(0);
-		System.out.println(students.size());
-		System.out.println(s.getFirstName());
+//		Query query = entityManager.createQuery(
+//				"select s from Student s where s.firstName like ?1");
+//		query.setParameter(1, "Jo%");
+//		List<Student> students = query.getResultList();
+//		Student s = students.get(0);
+//		System.out.println(students.size());
+//		System.out.println(s.getFirstName());
 		
 		entityManager.close();
 	}

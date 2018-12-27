@@ -6,6 +6,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.nnniu.wxmp.msgandevent.ImageMessage;
 import com.nnniu.wxmp.msgandevent.TextMessage;
+import com.nnniu.wxmp.msgandevent.VoiceMessage;
 
 @Configuration
 public class WXMPConfiguration { 
@@ -15,7 +16,8 @@ public class WXMPConfiguration {
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
 		jaxb2Marshaller.setClassesToBeBound(new Class[]{
 				TextMessage.class,
-				ImageMessage.class
+				ImageMessage.class,
+				VoiceMessage.class
 			});
 		return jaxb2Marshaller;
 	}
