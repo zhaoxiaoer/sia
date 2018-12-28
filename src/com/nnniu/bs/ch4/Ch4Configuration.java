@@ -12,15 +12,15 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @Configuration
 public class Ch4Configuration {
 
-	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://125.46.31.185:3306/ztest");
-		dataSource.setUsername("root");
-		dataSource.setPassword("");
-		return dataSource;
-	}
+//	@Bean
+//	public DataSource dataSource() {
+//		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//		dataSource.setUrl("jdbc:mysql://125.46.31.185:3306/ztest");
+//		dataSource.setUsername("root");
+//		dataSource.setPassword("");
+//		return dataSource;
+//	}
 	
 //	@Bean(destroyMethod="close")
 //	public DataSource dataSource() throws Exception {
@@ -33,16 +33,16 @@ public class Ch4Configuration {
 //	}
 	
 	@Bean
-	public JdbcTemplate jdbcTemplate() {
+	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
-		jdbcTemplate.setDataSource(dataSource());
+		jdbcTemplate.setDataSource(dataSource);
 		return jdbcTemplate;
 	}
 	
 	@Bean
-	public AccountDao accountDao() {
+	public AccountDao accountDao(JdbcTemplate jdbcTemplate) {
 		AccountDaoJdbcImpl accountDao = new AccountDaoJdbcImpl();
-		accountDao.setJdbcTemplate(jdbcTemplate());
+		accountDao.setJdbcTemplate(jdbcTemplate);
 		return accountDao;
 	}
 }
