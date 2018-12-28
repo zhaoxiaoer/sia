@@ -20,6 +20,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nnniu.wxmp.msgandevent.CommonXML;
 import com.nnniu.wxmp.msgandevent.ImageMessage;
 import com.nnniu.wxmp.msgandevent.TextMessage;
+import com.nnniu.wxmp.msgandevent.VideoMessage;
 import com.nnniu.wxmp.msgandevent.VoiceMessage;
 
 // @RestController 等价于 @Controller + @ResponseBody
@@ -38,6 +40,7 @@ public class MPController {
 	@Autowired
 	private Jaxb2Marshaller jaxb2Marshaller;
 	
+	// 服务器配置时，服务器地址的验证
 	@RequestMapping(method=RequestMethod.GET, value="/wx", produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String checkServer(HttpServletRequest request, 
@@ -71,6 +74,7 @@ public class MPController {
 			return "error";
 		}
 		
+//		System.out.println("echostr: " + echostr);
 		return echostr;
 	}
 	
@@ -89,6 +93,7 @@ public class MPController {
 		System.out.println(": " + simpleDateFormat.format(new Date(timestamp * 1000)));
 //		System.out.println("origin body: " + body);
 		
+		// 小视频，链接消息，不知怎么测试
 		// 根据 MsgType 字段替换根标签
 		if (body.indexOf("<MsgType><![CDATA[text]]></MsgType>") != -1) {
 			body = body.replace("<xml>", "<text>").replace("</xml>", "</text>");
@@ -96,8 +101,10 @@ public class MPController {
 			body = body.replace("<xml>", "<image>").replace("</xml>", "</image>");
 		} else if (body.indexOf("<MsgType><![CDATA[voice]]></MsgType>") != -1) {
 			body = body.replace("<xml>", "<voice>").replace("</xml>", "</voice>");
+		} else if (body.indexOf("<MsgType><![CDATA[video]]></MsgType>") != -1) {
+			body = body.replace("<xml>", "<video>").replace("</xml>", "</video>");
 		} else {
-			return "error";
+			return "success";
 		}
 		System.out.println("body: " + body);
 		
@@ -115,6 +122,45 @@ public class MPController {
 		return replyStr;
 	}
 	
+	// 公众号回复图文消息时的测试地址
+	@RequestMapping(method=RequestMethod.GET, value="/testUrl", produces="text/html; charset=UTF-8")
+	@ResponseBody
+	public String msgUrl(HttpServletRequest request) {
+		// 打印HTTP
+		System.out.println(request.getMethod() + " " + request.getRequestURI() + 
+			"?" + request.getQueryString() + " " + request.getProtocol());
+		Enumeration<String> keys = request.getHeaderNames();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			String value = request.getHeader(key);
+			System.out.println(key + ": " + value);
+		}
+		System.out.println("");
+		try {
+			ServletInputStream servletInputStream = request.getInputStream();
+			StringBuilder stringBuilder = new StringBuilder();
+			byte[] buffer = new byte[10240];
+			int lens = -1;
+			while ((lens = servletInputStream.read(buffer)) > 0) {
+				stringBuilder.append(new String(buffer, 0, lens));
+			}
+			System.out.println(stringBuilder.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "ok";
+	}
+	
+	/*
+	 * 定时刷新access_token
+	 */
+	@Scheduled(cron="0/15 * * * * *")
+	public void accessTokenRefresh() {
+		System.out.println("accessTokenRefresh...");
+	}
+	
 	private boolean checkSignature(String signature, String timestamp, String nonce) {
 		if ((signature == null || signature.equals("")) 
 				|| (timestamp == null || timestamp.equals("")) 
@@ -123,7 +169,7 @@ public class MPController {
 		}
 		
 		Map<String, String> m = buildMap(timestamp, nonce);
-		String sign = getSign2(m);
+		String sign = getSign(m);
 //		System.out.println("sign: " + sign);
 //		System.out.println("sig2: " + signature);
 		if (!sign.equals(signature)) {
@@ -142,21 +188,6 @@ public class MPController {
 	}
 	
 	private String getSign(Map<String, String> map) {
-		Set<String> s = map.keySet();
-		List<String> l = new ArrayList<String>(s);
-		Collections.sort(l);
-		
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < l.size(); i++) {
-			String key = l.get(i);
-			String value = map.get(key);
-			sb.append(key + "=" + value);
-		}
-		System.out.println("str: " + sb.toString());
-		return DigestUtils.sha1Hex(sb.toString().getBytes());
-	}
-	
-	private String getSign2(Map<String, String> map) {
 		Collection<String> col = map.values();
 		List<String> list = new ArrayList<String>(col);
 		Collections.sort(list);
@@ -168,7 +199,7 @@ public class MPController {
 		return DigestUtils.sha1Hex(sb.toString().getBytes());
 	}
 	
-	private String replyMessage(CommonXML commonXML) {
+	/*private String replyMessage(CommonXML commonXML) {
 		// 公共信息
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>");
@@ -179,15 +210,42 @@ public class MPController {
 		
 		if (commonXML.getMsgType().equals("text")) {
 			TextMessage textMessage = (TextMessage) commonXML;
-			sb.append("<Content><![CDATA[" + textMessage.getContent() + "]]></Content>");
+			sb.append("<Content><![CDATA[" + textMessage.getContent() + "<a href=\"www.mamaloveme.com\">www.mamaloveme.com</a>" + "]]></Content>");
 		} else if (commonXML.getMsgType().equals("image")) {
 			ImageMessage imageMessage = (ImageMessage) commonXML;
 			sb.append("<Image><MediaId><![CDATA[" + imageMessage.getMediaId() + "]]></MediaId></Image>");
-		} else {
+		} else if (commonXML.getMsgType().equals("voice")) {
 			VoiceMessage voiceMessage = (VoiceMessage) commonXML;
 			sb.append("<Voice><MediaId><![CDATA[" + voiceMessage.getMediaId() + "]]></MediaId></Voice>");
+		} else if (commonXML.getMsgType().equals("video")) {
+			// 目前回复视频消息出现错误，原因未知
+			VideoMessage videoMessage = (VideoMessage) commonXML;
+			sb.append("<Video><MediaId><![CDATA[" + videoMessage.getMediaId() + "]]></MediaId>");
+			sb.append("<Title><![CDATA[title]]></Title>");
+			sb.append("<Description><![CDATA[description]]></Description></Video>");
 		}
 		
+		sb.append("</xml>");
+		return sb.toString();
+	}*/
+	
+	private String replyMessage(CommonXML commonXML) {
+		// 公共信息
+		StringBuilder sb = new StringBuilder();
+		sb.append("<xml>");
+		sb.append("<ToUserName><![CDATA[" + commonXML.getToUserName() + "]]></ToUserName>");
+		sb.append("<FromUserName><![CDATA[" + commonXML.getFromUserName() + "]]></FromUserName>");
+		sb.append("<CreateTime>" + commonXML.getCreateTime() + "</CreateTime>");
+		sb.append("<MsgType><![CDATA[news]]></MsgType>");
+		sb.append("<ArticleCount>1</ArticleCount>");
+		sb.append("<Articles><item>");
+		
+		sb.append("<Title><![CDATA[title1]]></Title>");
+		sb.append("<Description><![CDATA[description1]]></Description>");
+		sb.append("<PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz_jpg/ibz3ZOnlLU3YGkNMorGUD9ia8n5GP0YRc52h1G73TfqB11ovS747fysf05ZVukTVGHJicvtZkS0Y104oWojHZbuSQ/0]]></PicUrl>");
+		sb.append("<Url><![CDATA[http://39.107.64.191/sia/testUrl]]></Url>");
+		
+		sb.append("</item></Articles>");
 		sb.append("</xml>");
 		return sb.toString();
 	}

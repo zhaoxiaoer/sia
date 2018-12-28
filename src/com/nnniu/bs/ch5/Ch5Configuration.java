@@ -77,7 +77,9 @@ public class Ch5Configuration {
 		return bean;
 	}
 	
-	// 启动Spring的异常管理和转换功能
+	/*
+	 * 启动Spring的异常管理和转换功能
+	 */
 	@Bean
 	public static PersistenceExceptionTranslationPostProcessor 
 		persistenceExceptionTranslationPostProcessor() {
