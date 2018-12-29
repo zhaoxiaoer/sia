@@ -18,6 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nnniu.wxmp.msgandevent.CommonXML;
 import com.nnniu.wxmp.msgandevent.ImageMessage;
 import com.nnniu.wxmp.msgandevent.TextMessage;
@@ -39,6 +49,15 @@ public class MPController {
 	
 	@Autowired
 	private Jaxb2Marshaller jaxb2Marshaller;
+	
+	// 全局AccessToken
+	private String accessToken;
+	private int expiresIn;
+	
+	// 通过构造函数，手动触发AccessToken的第一次获取
+	public MPController() {
+		accessTokenRefresh();
+	}
 	
 	// 服务器配置时，服务器地址的验证
 	@RequestMapping(method=RequestMethod.GET, value="/wx", produces="text/plain; charset=UTF-8")
@@ -156,9 +175,42 @@ public class MPController {
 	/*
 	 * 定时刷新access_token
 	 */
-	@Scheduled(cron="0/15 * * * * *")
+	@Scheduled(cron="0 0/55 1/2 * * *")
 	public void accessTokenRefresh() {
-		System.out.println("accessTokenRefresh...");
+//		System.out.println("accessTokenRefresh...");
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
+				+ MPConfig.APPID + "&secret=" + MPConfig.APPSECRET);
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setConnectTimeout(5000) // 连接超时时间
+				.setConnectionRequestTimeout(5000) // 请求超时时间
+				.setRedirectsEnabled(false) // 禁止重定向
+				.build();
+		httpGet.setConfig(requestConfig);
+		try {
+			CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+			int resCode = httpResponse.getStatusLine().getStatusCode();
+			if (resCode == HttpStatus.SC_OK) {
+				HttpEntity httpEntity = httpResponse.getEntity();
+				String entityStr = EntityUtils.toString(httpEntity);
+				System.out.println("entityStr: " + entityStr);
+				JSONObject json = JSONObject.parseObject(entityStr);
+				accessToken = json.getString("access_token");
+				expiresIn = json.getIntValue("expires_in");
+//				System.out.println("accessToken: " + accessToken);
+//				System.out.println("expiresIn: " + expiresIn);
+			} else {
+				System.out.println("Get Access Token response code: " + resCode);
+			}
+		} catch (IOException e) {
+			System.out.println("Get Access Token IOException!");
+		} finally {
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				
+			}
+		}
 	}
 	
 	private boolean checkSignature(String signature, String timestamp, String nonce) {
