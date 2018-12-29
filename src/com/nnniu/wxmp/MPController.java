@@ -2,6 +2,7 @@ package com.nnniu.wxmp;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nnniu.wxmp.msgandevent.CommonXML;
@@ -97,6 +100,7 @@ public class MPController {
 		return echostr;
 	}
 	
+	// 被动接收用户消息和事件，并自动回复
 	@RequestMapping(method=RequestMethod.POST, value="/wx", produces="application/xml; charset=UTF-8")
 	@ResponseBody
 	public String handleMessage(HttpServletRequest request, String signature, 
@@ -143,33 +147,56 @@ public class MPController {
 	
 	// 公众号回复图文消息时的测试地址
 	@RequestMapping(method=RequestMethod.GET, value="/testUrl", produces="text/html; charset=UTF-8")
-	@ResponseBody
-	public String msgUrl(HttpServletRequest request) {
+	public ModelAndView msgUrl(HttpServletRequest request, String code, String state) throws IOException {
 		// 打印HTTP
-		System.out.println(request.getMethod() + " " + request.getRequestURI() + 
-			"?" + request.getQueryString() + " " + request.getProtocol());
-		Enumeration<String> keys = request.getHeaderNames();
-		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			String value = request.getHeader(key);
-			System.out.println(key + ": " + value);
-		}
-		System.out.println("");
-		try {
-			ServletInputStream servletInputStream = request.getInputStream();
-			StringBuilder stringBuilder = new StringBuilder();
-			byte[] buffer = new byte[10240];
-			int lens = -1;
-			while ((lens = servletInputStream.read(buffer)) > 0) {
-				stringBuilder.append(new String(buffer, 0, lens));
-			}
-			System.out.println(stringBuilder.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		printHttpServletRequest(request);
+		
+		// 重定向
+		if ((code == null) || (code.equals(""))) {
+			String redirectUri = "http://" + "39.107.64.191" + request.getRequestURI();
+			String totalUri = "https://open.weixin.qq.com/connect/oauth2/authorize?"
+					+ "appid=" + MPConfig.APPID + "&"
+					+ "redirect_uri=" + URLEncoder.encode(redirectUri) + "&"
+					+ "response_type=code&scope=snsapi_base&state=123#wechat_redirect";
+			System.out.println("totalUri: " + totalUri);
+			return new ModelAndView(new RedirectView(totalUri));
 		}
 		
-		return "ok";
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet("https://api.weixin.qq.com/sns/oauth2/access_token?"
+				+ "appid=" + MPConfig.APPID + "&"
+				+ "secret=" + MPConfig.APPSECRET + "&"
+				+ "code=" + code + "&"
+				+ "grant_type=authorization_code");
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setConnectTimeout(5000)
+				.setConnectionRequestTimeout(5000)
+				.setRedirectsEnabled(false)
+				.build();
+		httpGet.setConfig(requestConfig);
+		CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+		int resCode = httpResponse.getStatusLine().getStatusCode();
+		String openId = "";
+		if (resCode == HttpStatus.SC_OK) {
+			HttpEntity httpEntity = httpResponse.getEntity();
+			String entityStr = EntityUtils.toString(httpEntity);
+			System.out.println("entityStr: " + entityStr);
+			JSONObject json = JSONObject.parseObject(entityStr);
+			String accessToken2 = json.getString("access_token");
+			int expiresIn2 = json.getIntValue("expires_in");
+			String refreshToken = json.getString("refresh_token");
+			openId = json.getString("openid");
+			String scope = json.getString("scope");
+		} else {
+			System.out.println("Get OpenId response code: " + resCode);
+		}
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("wxmp");
+		modelAndView.addObject("message", code);
+		modelAndView.addObject("openid", openId);
+		
+		return modelAndView;
 	}
 	
 	/*
@@ -300,5 +327,17 @@ public class MPController {
 		sb.append("</item></Articles>");
 		sb.append("</xml>");
 		return sb.toString();
+	}
+	
+	private void printHttpServletRequest(HttpServletRequest request) {
+		System.out.println(request.getMethod() + " " + request.getRequestURI() + 
+				"?" + request.getQueryString() + " " + request.getProtocol());
+		Enumeration<String> keys = request.getHeaderNames();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
+			String value = request.getHeader(key);
+			System.out.println(key + ": " + value);
+		}
+		System.out.println("");
 	}
 }
