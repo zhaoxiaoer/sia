@@ -44,6 +44,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.alibaba.fastjson.JSONObject;
 import com.nnniu.wxmp.msgandevent.CommonXML;
 import com.nnniu.wxmp.msgandevent.ImageMessage;
+import com.nnniu.wxmp.msgandevent.NormalEvent;
+import com.nnniu.wxmp.msgandevent.QrscanEvent;
+import com.nnniu.wxmp.msgandevent.QrsubEvent;
 import com.nnniu.wxmp.msgandevent.TextMessage;
 import com.nnniu.wxmp.msgandevent.VideoMessage;
 import com.nnniu.wxmp.msgandevent.VoiceMessage;
@@ -128,6 +131,30 @@ public class MPController {
 			body = body.replace("<xml>", "<voice>").replace("</xml>", "</voice>");
 		} else if (body.indexOf("<MsgType><![CDATA[video]]></MsgType>") != -1) {
 			body = body.replace("<xml>", "<video>").replace("</xml>", "</video>");
+		} /*else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+				&& (body.indexOf("<Event><![CDATA[subscribe]]></Event>") != -1)
+				&& (body.indexOf("qrscene_") != -1)) {
+			// 用户未关注时，扫描带参数的二维码进行关注后推送的事件
+			
+		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+				&& (body.indexOf("<Event><![CDATA[SCAN]]></Event>") != -1)) {
+			// 用户已关注时，扫描带参数的二维码后推送的事件
+			
+		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+				&& (body.indexOf("<Event><![CDATA[LOCATION]]></Event>") != -1)) {
+			// 用户同意上报地理位置时，每次进入公众号会话时，都会上报地理位置
+			
+		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+				&& (body.indexOf("<Event><![CDATA[CLICK]]></Event>") != -1)) {
+			// 用户点击自定义菜单拉取消息时的事件推送
+			
+		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+				&& (body.indexOf("<Event><![CDATA[CLICK]]></Event>") != -1)) {
+			// 用户点击自定义菜单跳转链接时的事件推送
+			
+		} */else if (body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1) {
+			// 关注/取消关注事件
+			body = body.replace("<xml>", "<normalevent>").replace("</xml>", "</normalevent>");
 		} else {
 			return "success";
 		}
@@ -136,13 +163,29 @@ public class MPController {
 		CommonXML message = (CommonXML) jaxb2Marshaller.unmarshal(
 				new StreamSource(new StringReader(body)));
 		System.out.println("message: " + message);
-				
-		// 回复
+		
+		// 交换消息或事件的发送者和接收者
 		String to = message.getFromUserName();
 		message.setFromUserName(message.getToUserName());
 		message.setToUserName(to);
-		// 手动组装回复XML
-		String replyStr = replyMessage(message);
+		
+		String replyStr = "";
+		if (message.getMsgType().equals("event")) {
+			if (message instanceof QrsubEvent) {
+				
+			} else if (message instanceof QrscanEvent) {
+				
+			} else if (message instanceof NormalEvent) {
+				NormalEvent normalEvent = (NormalEvent) message;
+				if (normalEvent.getEvent().equals("subscribe")) {
+					replyStr = replyEvent(message);
+				}
+			}
+		} else {
+			// 消息
+			// 手动组装回复XML
+			replyStr = replyMessage(message);
+		}
 		System.out.println("out: " + replyStr);
 		return replyStr;
 	}
@@ -342,8 +385,22 @@ public class MPController {
 		sb.append("<Description><![CDATA[description1]]></Description>");
 		sb.append("<PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz_jpg/ibz3ZOnlLU3YGkNMorGUD9ia8n5GP0YRc52h1G73TfqB11ovS747fysf05ZVukTVGHJicvtZkS0Y104oWojHZbuSQ/0]]></PicUrl>");
 		sb.append("<Url><![CDATA[http://39.107.64.191/sia/wxtestUrl]]></Url>");
+//		sb.append("<Url><![CDATA[http://www.mamaloveme.com]]></Url>");
 		
 		sb.append("</item></Articles>");
+		sb.append("</xml>");
+		return sb.toString();
+	}
+	
+	private String replyEvent(CommonXML commonXML) {
+		// 公共信息
+		StringBuilder sb = new StringBuilder();
+		sb.append("<xml>");
+		sb.append("<ToUserName><![CDATA[" + commonXML.getToUserName() + "]]></ToUserName>");
+		sb.append("<FromUserName><![CDATA[" + commonXML.getFromUserName() + "]]></FromUserName>");
+		sb.append("<CreateTime>" + commonXML.getCreateTime() + "</CreateTime>");
+		sb.append("<MsgType><![CDATA[text]]></MsgType>");
+		sb.append("<Content><![CDATA[" + "欢迎您" + "<a href=\"www.mamaloveme.com\">www.mamaloveme.com</a>" + "]]></Content>");
 		sb.append("</xml>");
 		return sb.toString();
 	}

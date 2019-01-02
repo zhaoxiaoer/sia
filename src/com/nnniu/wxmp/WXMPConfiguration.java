@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import com.nnniu.wxmp.msgandevent.ImageMessage;
+import com.nnniu.wxmp.msgandevent.NormalEvent;
+import com.nnniu.wxmp.msgandevent.QrscanEvent;
+import com.nnniu.wxmp.msgandevent.QrsubEvent;
 import com.nnniu.wxmp.msgandevent.TextMessage;
 import com.nnniu.wxmp.msgandevent.VideoMessage;
 import com.nnniu.wxmp.msgandevent.VoiceMessage;
@@ -19,7 +22,10 @@ public class WXMPConfiguration {
 				TextMessage.class,
 				ImageMessage.class,
 				VoiceMessage.class,
-				VideoMessage.class
+				VideoMessage.class,
+				NormalEvent.class,
+				QrsubEvent.class,
+				QrscanEvent.class
 			});
 		return jaxb2Marshaller;
 	}
