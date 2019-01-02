@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -32,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -146,7 +148,7 @@ public class MPController {
 	}
 	
 	// 公众号回复图文消息时的测试地址
-	@RequestMapping(method=RequestMethod.GET, value="/testUrl", produces="text/html; charset=UTF-8")
+	@RequestMapping(method=RequestMethod.GET, value="/wxtestUrl", produces="text/html; charset=UTF-8")
 	public ModelAndView msgUrl(HttpServletRequest request, String code, String state) throws IOException {
 		// 打印HTTP
 		printHttpServletRequest(request);
@@ -192,9 +194,26 @@ public class MPController {
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("wxmp");
-		modelAndView.addObject("message", code);
-		modelAndView.addObject("openid", openId);
+		User2 user2 = new User2();
+		user2.setOpenId(openId);
+		modelAndView.setViewName("wxUserForm");
+		modelAndView.addObject("user2", user2);
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="wXUserResult", produces="text/html; charset=UTF-8")
+	public ModelAndView processWXUser(@Valid User2 user2, BindingResult bindingResult) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("user2", user2);
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("wxUserForm");
+		} else {
+			// TODO 验证手机号是否正确
+			
+			modelAndView.setViewName("wxUserResult");
+		}
 		
 		return modelAndView;
 	}
@@ -322,7 +341,7 @@ public class MPController {
 		sb.append("<Title><![CDATA[title1]]></Title>");
 		sb.append("<Description><![CDATA[description1]]></Description>");
 		sb.append("<PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz_jpg/ibz3ZOnlLU3YGkNMorGUD9ia8n5GP0YRc52h1G73TfqB11ovS747fysf05ZVukTVGHJicvtZkS0Y104oWojHZbuSQ/0]]></PicUrl>");
-		sb.append("<Url><![CDATA[http://39.107.64.191/sia/testUrl]]></Url>");
+		sb.append("<Url><![CDATA[http://39.107.64.191/sia/wxtestUrl]]></Url>");
 		
 		sb.append("</item></Articles>");
 		sb.append("</xml>");
