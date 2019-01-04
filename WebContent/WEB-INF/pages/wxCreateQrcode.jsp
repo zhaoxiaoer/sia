@@ -4,36 +4,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>生成带参数的二维码</title>
-<style type="text/css">
-  .formFieldError { background-color: #FFC; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>生成带参数的二维码</title>
+  <style type="text/css">
+    .formFieldError { background-color: #FFC; }
+  </style>
+  <!-- 引入 WeUI -->
+  <link rel="stylesheet" href="/sia/res/weui/css/example.css" />
+  <link rel="stylesheet" href="/sia/res/weui/css/weui.css" />
 </head>
 <body>
-  <h2>生成带参数的二维码</h2>
-  <mvc:form modelAttribute="qrcodeinfo" action="wxcreateqrcoderesult.mvc">
-    <table>
-      <tr>
-        <td><mvc:label path="qrtype">二维码类型</mvc:label></td>
-        <td><mvc:radiobuttons path="qrtype" items="${ qrtypes }" cssErrorClass="formFieldError" /></td>
-        <td><mvc:errors path="qrtype" /></td>
-      </tr>
-      <tr>
-        <td><mvc:label path="expiration">临时二维码过期时间（单位：秒）</mvc:label></td>
-        <td><mvc:input path="expiration" cssErrorClass="formFieldError" /></td>
-        <td><mvc:errors path="expiration" /></td>
-      </tr>
-      <tr>
-        <td><mvc:label path="scene">场景</mvc:label></td>
-        <td><mvc:input path="scene" cssErrorClass="formFieldError" /></td>
-        <td><mvc:errors path="scene" /></td>
-      </tr>
-      <tr>
-        <td colspan="2"><input type="submit" value="生成二维码" /></td>
-      </tr>
-    </table>
-  </mvc:form>
+  <div id="container" class="container">
+    <div class="page__hd">
+      <h2 class="page__title">生成带参数的二维码</h2>
+    </div>
+    <mvc:form modelAttribute="qrcodeinfo" action="wxcreateqrcoderesult.mvc">
+      <table>
+        <tr>
+          <td><mvc:label path="qrtype">二维码类型</mvc:label></td>
+          <td><mvc:radiobuttons path="qrtype" items="${ qrtypes }" cssErrorClass="formFieldError" /></td>
+          <td><mvc:errors path="qrtype" /></td>
+        </tr>
+        <tr>
+          <td><mvc:label path="expiration">临时二维码过期时间（单位：秒）</mvc:label></td>
+          <td><mvc:input path="expiration" cssErrorClass="formFieldError" /></td>
+          <td><mvc:errors path="expiration" /></td>
+        </tr>
+        <tr>
+          <td><mvc:label path="scene">场景</mvc:label></td>
+          <td><mvc:input path="scene" cssErrorClass="formFieldError" /></td>
+          <td><mvc:errors path="scene" /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="生成二维码" /></td>
+        </tr>
+      </table>
+    </mvc:form>
+  </div>
 </body>
 </html>

@@ -31,4 +31,5 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</bean>
 	
+	<mvc:resources location="/res/" mapping="/res/**" />
 </beans>
