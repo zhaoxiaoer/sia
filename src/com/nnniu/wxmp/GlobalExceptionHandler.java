@@ -1,5 +1,7 @@
 package com.nnniu.wxmp;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,4 +28,10 @@ public class GlobalExceptionHandler {
 		return "Get Access Token Exception!";
 	}
 	
+	@ExceptionHandler(IOException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseBody
+	public String handleIOError() {
+		return "网络异常，请稍后重试";
+	}
 }

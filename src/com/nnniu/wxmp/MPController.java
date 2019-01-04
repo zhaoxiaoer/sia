@@ -26,6 +26,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -61,6 +63,10 @@ public class MPController {
 	// 全局AccessToken
 	private String accessToken;
 	private int expiresIn;
+	
+	// 二维码类型
+//	private static final String[] qrtypes = { "temporary", "permanent" };
+	private static final String[] qrtypes = { "永久", "临时" };
 	
 	// 通过构造函数，手动触发AccessToken的第一次获取
 	public MPController() {
@@ -131,16 +137,16 @@ public class MPController {
 			body = body.replace("<xml>", "<voice>").replace("</xml>", "</voice>");
 		} else if (body.indexOf("<MsgType><![CDATA[video]]></MsgType>") != -1) {
 			body = body.replace("<xml>", "<video>").replace("</xml>", "</video>");
-		} /*else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
 				&& (body.indexOf("<Event><![CDATA[subscribe]]></Event>") != -1)
 				&& (body.indexOf("qrscene_") != -1)) {
 			// 用户未关注时，扫描带参数的二维码进行关注后推送的事件
-			
+			body = body.replace("<xml>", "<qrsubevent>").replace("</xml>", "</qrsubevent>");
 		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
 				&& (body.indexOf("<Event><![CDATA[SCAN]]></Event>") != -1)) {
 			// 用户已关注时，扫描带参数的二维码后推送的事件
-			
-		} else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
+			body = body.replace("<xml>", "<qrscanevent>").replace("</xml>", "</qrscanevent>");
+		} /*else if ((body.indexOf("<MsgType><![CDATA[event]]></MsgType>") != -1)
 				&& (body.indexOf("<Event><![CDATA[LOCATION]]></Event>") != -1)) {
 			// 用户同意上报地理位置时，每次进入公众号会话时，都会上报地理位置
 			
@@ -164,23 +170,9 @@ public class MPController {
 				new StreamSource(new StringReader(body)));
 		System.out.println("message: " + message);
 		
-		// 交换消息或事件的发送者和接收者
-		String to = message.getFromUserName();
-		message.setFromUserName(message.getToUserName());
-		message.setToUserName(to);
-		
 		String replyStr = "";
 		if (message.getMsgType().equals("event")) {
-			if (message instanceof QrsubEvent) {
-				
-			} else if (message instanceof QrscanEvent) {
-				
-			} else if (message instanceof NormalEvent) {
-				NormalEvent normalEvent = (NormalEvent) message;
-				if (normalEvent.getEvent().equals("subscribe")) {
-					replyStr = replyEvent(message);
-				}
-			}
+			replyStr = replyEvent(message);
 		} else {
 			// 消息
 			// 手动组装回复XML
@@ -245,7 +237,7 @@ public class MPController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="wXUserResult", produces="text/html; charset=UTF-8")
+	@RequestMapping(method=RequestMethod.POST, value="/wXUserResult", produces="text/html; charset=UTF-8")
 	public ModelAndView processWXUser(@Valid User2 user2, BindingResult bindingResult) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("user2", user2);
@@ -256,6 +248,75 @@ public class MPController {
 			// TODO 验证手机号是否正确
 			
 			modelAndView.setViewName("wxUserResult");
+		}
+		
+		return modelAndView;
+	}
+	
+	/*
+	 * 生成带参数的二维码
+	 */
+	@RequestMapping(method=RequestMethod.GET, value="/wxcreateqrcode", produces="text/html; charset=UTF-8")
+	public ModelAndView createQrcode() {
+		ModelAndView modelAndView = new ModelAndView("wxCreateQrcode");
+		Qrcodeinfo qrcodeinfo = new Qrcodeinfo();
+		modelAndView.addObject("qrcodeinfo", qrcodeinfo);
+		modelAndView.addObject("qrtypes", qrtypes);
+		return modelAndView;
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/wxcreateqrcoderesult", produces="text/html; charset=UTF-8")
+	public ModelAndView createQrcodeResult(@Valid Qrcodeinfo qrcodeinfo, BindingResult bindingResult) throws IOException {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			modelAndView.setViewName("wxCreateQrcode");
+			modelAndView.addObject("qrtypes", qrtypes);
+		} else {
+			// 获取ticket
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpPost httpPost = new HttpPost("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken);
+			RequestConfig requestConfig = RequestConfig.custom()
+					.setConnectTimeout(5000)
+					.setConnectionRequestTimeout(5000)
+					.setRedirectsEnabled(false)
+					.build();
+			httpPost.setConfig(requestConfig);
+			
+			// Post数据
+			JSONObject json = new JSONObject();
+			if (qrcodeinfo.getQrtype().equals("永久")) {
+				json.put("action_name", "QR_LIMIT_SCENE");
+			} else {
+				json.put("action_name", "QR_SCENE");
+				json.put("expire_seconds", qrcodeinfo.getExpiration());
+			}
+			JSONObject json2 = new JSONObject();
+			json2.put("scene_id", qrcodeinfo.getScene());
+			JSONObject json3 = new JSONObject();
+			json3.put("scene", json2);
+			json.put("action_info", json3);
+			System.out.println("json: " + json.toString());
+			StringEntity stringEntity = new StringEntity(json.toString());
+			httpPost.setEntity(stringEntity);
+			httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
+			
+			String ticket = "";
+			CloseableHttpResponse httpResponse = httpClient.execute(httpPost);
+			int resCode = httpResponse.getStatusLine().getStatusCode();
+			if (resCode == HttpStatus.SC_OK) {
+				HttpEntity httpEntity = httpResponse.getEntity();
+				String entityStr = EntityUtils.toString(httpEntity);
+				System.out.println("ticket: " + entityStr);
+				JSONObject json5 = JSONObject.parseObject(entityStr);
+				ticket = json5.getString("ticket");
+			} else {
+				System.out.println("获取ticket失败");
+			}
+			
+			modelAndView.setViewName("wxCreateQrcodeResult");
+			modelAndView.addObject("scene", qrcodeinfo.getScene());
+			modelAndView.addObject("src", "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + URLEncoder.encode(ticket));
 		}
 		
 		return modelAndView;
@@ -374,8 +435,8 @@ public class MPController {
 		// 公共信息
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>");
-		sb.append("<ToUserName><![CDATA[" + commonXML.getToUserName() + "]]></ToUserName>");
-		sb.append("<FromUserName><![CDATA[" + commonXML.getFromUserName() + "]]></FromUserName>");
+		sb.append("<ToUserName><![CDATA[" + commonXML.getFromUserName() + "]]></ToUserName>");
+		sb.append("<FromUserName><![CDATA[" + commonXML.getToUserName() + "]]></FromUserName>");
 		sb.append("<CreateTime>" + commonXML.getCreateTime() + "</CreateTime>");
 		sb.append("<MsgType><![CDATA[news]]></MsgType>");
 		sb.append("<ArticleCount>1</ArticleCount>");
@@ -393,14 +454,34 @@ public class MPController {
 	}
 	
 	private String replyEvent(CommonXML commonXML) {
+		String extStr = "";
+		if (commonXML instanceof QrsubEvent) {
+			QrsubEvent event = (QrsubEvent) commonXML;
+			String eventKey = event.getEventKey();
+			int index = eventKey.indexOf("qrscene_");
+			if (index != -1) {
+				int scene = Integer.parseInt(eventKey.substring(index + 8));
+				extStr = ", 场景值为" + scene;
+			}
+		} else if (commonXML instanceof QrscanEvent) {
+			QrscanEvent event = (QrscanEvent) commonXML;
+			extStr = ", 场景值为" + event.getEventKey();
+		} else if (commonXML instanceof NormalEvent) {
+			NormalEvent normalEvent = (NormalEvent) commonXML;
+			// 取消订阅时，不应该回复消息
+			if (normalEvent.getEvent().equals("unsubscribe")) {
+				return "";
+			}
+		}
+		
 		// 公共信息
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>");
-		sb.append("<ToUserName><![CDATA[" + commonXML.getToUserName() + "]]></ToUserName>");
-		sb.append("<FromUserName><![CDATA[" + commonXML.getFromUserName() + "]]></FromUserName>");
+		sb.append("<ToUserName><![CDATA[" + commonXML.getFromUserName() + "]]></ToUserName>");
+		sb.append("<FromUserName><![CDATA[" + commonXML.getToUserName() + "]]></FromUserName>");
 		sb.append("<CreateTime>" + commonXML.getCreateTime() + "</CreateTime>");
 		sb.append("<MsgType><![CDATA[text]]></MsgType>");
-		sb.append("<Content><![CDATA[" + "欢迎您" + "<a href=\"www.mamaloveme.com\">www.mamaloveme.com</a>" + "]]></Content>");
+		sb.append("<Content><![CDATA[" + "欢迎您" + "<a href=\"www.mamaloveme.com\">www.mamaloveme.com</a>" + extStr + "]]></Content>");
 		sb.append("</xml>");
 		return sb.toString();
 	}
