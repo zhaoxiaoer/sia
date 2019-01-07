@@ -16,31 +16,35 @@
 </head>
 <body>
   <div id="container" class="container">
-    <div class="page__hd">
-      <h2 class="page__title">生成带参数的二维码</h2>
+    <div class="">
+	    <div class="page__hd">
+	      <h2 class="page__title">生成带参数的二维码</h2>
+	    </div>
+	    <div class="page__bd page_bd_spacing">
+		    <mvc:form modelAttribute="qrcodeinfo" action="wxcreateqrcoderesult.mvc">
+		      <table>
+		        <tr>
+		          <td><mvc:label path="qrtype" class="weui-cells__title">二维码类型</mvc:label></td>
+		          <td><mvc:radiobuttons path="qrtype" items="${ qrtypes }" cssErrorClass="formFieldError" /></td>
+		          <td><mvc:errors path="qrtype" /></td>
+		        </tr>
+		        <tr>
+		          <td><mvc:label path="expiration">临时二维码过期时间（单位：秒）</mvc:label></td>
+		          <td><mvc:input path="expiration" cssErrorClass="formFieldError" /></td>
+		          <td><mvc:errors path="expiration" /></td>
+		        </tr>
+		        <tr>
+		          <td><mvc:label path="scene">场景</mvc:label></td>
+		          <td><mvc:input path="scene" cssErrorClass="formFieldError" /></td>
+		          <td><mvc:errors path="scene" /></td>
+		        </tr>
+		        <tr>
+		          <td colspan="2"><input type="submit" value="生成二维码" /></td>
+		        </tr>
+		      </table>
+		    </mvc:form>
+		</div>
     </div>
-    <mvc:form modelAttribute="qrcodeinfo" action="wxcreateqrcoderesult.mvc">
-      <table>
-        <tr>
-          <td><mvc:label path="qrtype">二维码类型</mvc:label></td>
-          <td><mvc:radiobuttons path="qrtype" items="${ qrtypes }" cssErrorClass="formFieldError" /></td>
-          <td><mvc:errors path="qrtype" /></td>
-        </tr>
-        <tr>
-          <td><mvc:label path="expiration">临时二维码过期时间（单位：秒）</mvc:label></td>
-          <td><mvc:input path="expiration" cssErrorClass="formFieldError" /></td>
-          <td><mvc:errors path="expiration" /></td>
-        </tr>
-        <tr>
-          <td><mvc:label path="scene">场景</mvc:label></td>
-          <td><mvc:input path="scene" cssErrorClass="formFieldError" /></td>
-          <td><mvc:errors path="scene" /></td>
-        </tr>
-        <tr>
-          <td colspan="2"><input type="submit" value="生成二维码" /></td>
-        </tr>
-      </table>
-    </mvc:form>
   </div>
 </body>
 </html>
