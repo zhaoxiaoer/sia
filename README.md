@@ -60,3 +60,6 @@ javassist-3.23.1-GA.jar <br />
 jboss-logging-3.3.2.Final.jar <br />
 hibernate-commons-annotations-5.0.4.Final.jar <br />
 antlr-2.7.7.jar <br />
+
+### log4j 相关jar包
+log4j-core-2.11.1.jar log4j-api-2.11.1.jar
