@@ -28,7 +28,7 @@ public class Main {
 		
 		session = sessionFactory.openSession();
 		List messages = session.createQuery("from Message").list();
-		logger.debug("Found " + messages.size() + "message(s):");
+		logger.debug("Found " + messages.size() + " message(s):");
 		Iterator i = messages.iterator();
 		while (i.hasNext()) {
 			Message msg2 = (Message) i.next();
