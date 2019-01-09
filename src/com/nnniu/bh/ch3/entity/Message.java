@@ -1,4 +1,4 @@
-package com.nnniu.bh.ch3;
+package com.nnniu.bh.ch3.entity;
 
 public class Message {
 	

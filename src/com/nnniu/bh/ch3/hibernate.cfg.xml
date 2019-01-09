@@ -14,6 +14,9 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		
 		<!-- "Import" the mapping resources here -->
-		<mapping resource="com/nnniu/bh/ch3/Message.hbm.xml" />
+		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Message.hbm.xml" />
+		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Category.hbm.xml" />
+		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Advert.hbm.xml" />
+		<mapping resource="com/nnniu/bh/ch3/entity/hbm/User.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

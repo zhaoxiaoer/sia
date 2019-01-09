@@ -25,8 +25,8 @@ public class Ch5Configuration {
 	@Bean(destroyMethod="close")
 	public DataSource dataSource() throws PropertyVetoException {
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
-		dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
 		dataSource.setJdbcUrl("jdbc:mysql://125.46.31.185:3306/ztest");
+		dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
 		dataSource.setUser("root");
 		dataSource.setPassword("");
 		return dataSource;

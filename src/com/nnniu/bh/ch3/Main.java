@@ -10,6 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.nnniu.bh.ch3.entity.Message;
+
 
 public class Main {
 	
@@ -24,9 +26,7 @@ public class Main {
 		Message msg = new Message("Hibernated a message on " + new Date());
 		session.save(msg);
 		session.getTransaction().commit();
-		session.close();
 		
-		session = sessionFactory.openSession();
 		List messages = session.createQuery("from Message").list();
 		logger.debug("Found " + messages.size() + " message(s):");
 		Iterator i = messages.iterator();

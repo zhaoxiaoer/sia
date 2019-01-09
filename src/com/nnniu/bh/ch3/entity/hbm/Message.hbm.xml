@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="com.nnniu.bh.ch3">
+<hibernate-mapping package="com.nnniu.bh.ch3.entity">
 	<class name="Message" table="Message">
 		<id column="id" type="int">
 			<generator class="native" />
