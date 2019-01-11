@@ -4,7 +4,7 @@
   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="com.nnniu.bh.ch3.entity.User" table="aduser">
-		<id column="id" type="long">
+		<id name="id" column="id" type="long">
 			<generator class="native" />
 		</id>
 		<property name="name" column="name" type="string" unique="true"></property>
