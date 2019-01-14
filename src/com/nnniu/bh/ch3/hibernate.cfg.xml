@@ -18,5 +18,10 @@
 		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Category.hbm.xml" />
 		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Advert.hbm.xml" />
 		<mapping resource="com/nnniu/bh/ch3/entity/hbm/User.hbm.xml" />
+		<!-- <mapping resource="com/nnniu/bh/ch7/entity/hbm/Advert2.hbm.xml" /> -->
+		<mapping resource="com/nnniu/bh/ch7/entity/hbm/Picture.hbm.xml" />
+		<!-- 测试一对多，多对多 -->
+		<!-- <mapping resource="com/nnniu/bh/ch7/entity/hbm/Advert2_onetomany.hbm.xml" /> -->
+		<mapping resource="com/nnniu/bh/ch7/entity/hbm/Advert2_manytomany.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

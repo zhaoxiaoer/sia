@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.bh.ch7.entity.Advert2">
+		<!-- 一对一，主键关联 -->
+		<id name="id" type="long" column="id">
+			<generator class="foreign">
+				<param name="property">picture</param>
+			</generator>
+		</id>
+		<property name="title" type="string" length="255" />
+		<property name="content" type="text" />
+		<one-to-one name="picture" 
+			class="com.nnniu.bh.ch7.entity.Picture"
+			constrained="true"
+			foreign-key="fk_advert2_picture" />
+	</class>
+</hibernate-mapping>
