@@ -12,6 +12,10 @@
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
+		<!-- 隔离级别 -->
+		<!-- <property name="hibernate.connection.isolation">8</property> -->
+		<!-- 二级缓存 -->
+		<property name="hibernate.cache.region.factory_class">com.nnniu.bh.ch8.MyRegionFactoryImpl</property>
 		
 		<!-- "Import" the mapping resources here -->
 		<mapping resource="com/nnniu/bh/ch3/entity/hbm/Message.hbm.xml" />
