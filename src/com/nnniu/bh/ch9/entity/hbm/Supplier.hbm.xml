@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.bh.ch9.entity.Supplier">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" length="255" not-null="true" unique="true" />
+		<list name="products" cascade="all" >
+			<key column="supplier" />
+			<list-index column="idx" />
+			<one-to-many class="com.nnniu.bh.ch9.entity.Product"/>
+		</list>
+	</class>
+	
+	<query name="supplier.findAll">
+		<![CDATA[from Supplier s]]>
+	</query>
+	<query name="supplier.findByName">
+		<![CDATA[from Supplier s where s.name=:name]]>
+	</query>
+	<sql-query name="supplier.findAverage">
+		<![CDATA[select p.supplier, avg(p.price) from product p
+		 group by p.supplier]]>
+	</sql-query>
+</hibernate-mapping>

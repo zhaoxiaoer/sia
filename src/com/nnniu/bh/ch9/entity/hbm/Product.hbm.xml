@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.bh.ch9.entity.Product">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<many-to-one 
+			name="supplier" 
+			class="com.nnniu.bh.ch9.entity.Supplier"
+			column="supplier" />
+		<property name="name" type="string" length="255" not-null="true" />
+		<property name="description" type="text" not-null="true" />
+		<property name="price" type="double" not-null="true" />
+		<filter name="maxIdFilter" condition=":maxIdParam >= id"></filter>
+	</class>
+	
+	<query name="product.searchByPhrase">
+		<![CDATA[from Product p where p.name like :text or p.description like :text]]>
+	</query>
+	<query name="product.findProductAndSupplier">
+		<![CDATA[from Product p inner join p.supplier as s]]>
+	</query>
+	<filter-def name="maxIdFilter">
+		<filter-param name="maxIdParam" type="long"/>
+	</filter-def>
+</hibernate-mapping>
