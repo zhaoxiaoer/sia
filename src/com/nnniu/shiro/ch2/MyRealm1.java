@@ -1,4 +1,4 @@
-package com.nnniu.shiro;
+package com.nnniu.shiro.ch2;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
