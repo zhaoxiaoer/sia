@@ -11,7 +11,7 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MyRealm1 implements Realm {
+public class MyRealm2 implements Realm {
 	
 	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -28,7 +28,7 @@ public class MyRealm1 implements Realm {
 	@Override
 	public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) 
 			throws AuthenticationException {
-		logger.debug("1111111111111111111");
+		logger.debug("222222222222222");
 		
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
@@ -39,7 +39,7 @@ public class MyRealm1 implements Realm {
 			throw new IncorrectCredentialsException();
 		}
 		
-		return new SimpleAuthenticationInfo(username + "@1qq.com", password, getName());
+		return new SimpleAuthenticationInfo(username + "@2qq.com", password, getName());
 	}
 	
 }

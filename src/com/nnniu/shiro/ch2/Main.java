@@ -1,5 +1,7 @@
 package com.nnniu.shiro.ch2;
 
+import java.util.Iterator;
+
 import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
@@ -7,6 +9,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
@@ -37,9 +40,18 @@ public class Main {
 			logger.debug("aaaaaaaa:");
 			// 4. 登录，即身份验证
 			subject.login(token);
+			
+			// 得到一个身份集合，其包含了Realm验证成功的身份信息
+			PrincipalCollection principalCollection = subject.getPrincipals();
+			Iterator iterator = principalCollection.iterator();
+			while (iterator.hasNext()) {
+				Object principal = iterator.next();
+				logger.debug("principal: " + principal.toString());
+			}
 		} catch (AuthenticationException e) {
 			// 5. 身份验证失败
 			logger.debug("bbbbbbbbb: " + e.toString());
+			return;
 		}
 		
 		// 6. 用户已经登录
