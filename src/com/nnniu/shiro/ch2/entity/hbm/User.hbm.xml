@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.shiro.ch2.entity.User" table="users">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="username" type="string" length="100" unique="true" />
+		<property name="password" type="string" length="100" />
+		<property name="passwordSalt" type="string" length="100" />
+		<!-- 多对多 -->
+		<set name="roles" table="link_user_role" cascade="all">
+			<key column="userid" />
+			<many-to-many class="com.nnniu.shiro.ch2.entity.Role"
+				column="roleid" />
+		</set>
+	</class>
+</hibernate-mapping>

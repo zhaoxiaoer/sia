@@ -35,6 +35,7 @@ public class Main {
 			logger.debug(msg2.getMessage());
 		}
 		session.close();
+		sessionFactory.close();
 	}
 	
 }

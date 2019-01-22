@@ -22,7 +22,8 @@ public class Main {
 	public static void main(String[] args) {
 		// 1. 获取SecurityManager工厂，此处使用Ini配置文件初始化SecurityManager
 //		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-realm.ini");
+//		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-realm.ini");
+		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-jdbc-realm.ini");
 		
 		// 2. 得到SecurityManager实例，并绑定给SecurityUtils
 		org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
@@ -30,7 +31,7 @@ public class Main {
 		
 		// 3. 得到Subject，创建用户名/密码身份验证Token （用户身份/凭证）
 		Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken("zhao", "123");
+		UsernamePasswordToken token = new UsernamePasswordToken("zhao", "123456");
 		
 		try {
 			logger.debug("aaaaaaaa:");
@@ -42,6 +43,7 @@ public class Main {
 		}
 		
 		// 6. 用户已经登录
+		logger.debug("用户已登录");
 		
 		// 7. 退出
 		subject.logout();
