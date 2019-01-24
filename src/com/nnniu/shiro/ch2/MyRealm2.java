@@ -32,14 +32,14 @@ public class MyRealm2 implements Realm {
 		
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
-		if (!"zhao".equals(username)) {
+		if (!"han".equals(username)) {
 			throw new UnknownAccountException();
 		}
-		if (!"123456".equals(password)) {
+		if (!"654321".equals(password)) {
 			throw new IncorrectCredentialsException();
 		}
 		
-		return new SimpleAuthenticationInfo(username + "@2qq.com", password, getName());
+		return new SimpleAuthenticationInfo(username + "@qq.com", password, getName());
 	}
 	
 }
