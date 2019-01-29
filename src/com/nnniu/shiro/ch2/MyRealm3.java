@@ -9,10 +9,14 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -40,14 +44,25 @@ public class MyRealm3 extends AuthorizingRealm {
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 		
-		logger.debug("1111111111111111113");
-//		logger.debug("encryptPassword: " + passwordService.encryptPassword(password));
+//		RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+//		String pubSalt = randomNumberGenerator.nextBytes().toHex();
+//		logger.debug("publicSalt: " + pubSalt);
+//		
+//		String md5Pwd = new Md5Hash(password, "" + pubSalt).toHex();
+//		logger.debug("md5Pwd: " + md5Pwd + ", " + passwordService.encryptPassword("password"));
+//		
+//		return new SimpleAuthenticationInfo(username + "@qq.com", md5Pwd, ByteSource.Util.bytes("" + pubSalt), getName());
 		
+		logger.debug("1111111111111111113: " + username + ", " + password);
 //		return new SimpleAuthenticationInfo(username + "@qq.com", passwordService.encryptPassword(password), getName());
-		String md5Pwd = new Md5Hash(password, "123").toString();
+		String algorithmName = "MD5";
+		String priSalt = "mm";
+		String pubSalt = new SecureRandomNumberGenerator().nextBytes().toHex();
+		String secPwd = new SimpleHash(algorithmName, password, priSalt + pubSalt, 1).toHex();
+		logger.debug("secPwd: " + secPwd + ", public salt: " + pubSalt);
 		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-				username + "@qq.com", md5Pwd, getName());
-		simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("123"));
+				username + "@qq.com", secPwd, getName());
+		simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(priSalt + pubSalt));
 		
 		return simpleAuthenticationInfo;
 	}

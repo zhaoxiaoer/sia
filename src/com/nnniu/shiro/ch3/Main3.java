@@ -9,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.authz.ModularRealmAuthorizer;
@@ -21,6 +22,8 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.HashRequest;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.format.DefaultHashFormatFactory;
+import org.apache.shiro.crypto.hash.format.HexFormat;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -50,7 +53,22 @@ public class Main3 {
 		
 		// 配置realm
 		MyRealm3 myRealm3 = new MyRealm3();
+//		// 密码服务
 //		DefaultPasswordService passwordService = new DefaultPasswordService();
+//		DefaultHashService hashService = new DefaultHashService();
+//		hashService.setHashAlgorithmName("MD5");
+//		hashService.setPrivateSalt(ByteSource.Util.bytes(""));
+//		// 不知道下面两行代码的作用，所以先注释掉
+//		hashService.setGeneratePublicSalt(true);
+//		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
+//		hashService.setHashIterations(1);
+//		passwordService.setHashService(hashService);
+//		passwordService.setHashFormat(new HexFormat());
+//		passwordService.setHashFormatFactory(new DefaultHashFormatFactory());
+//		PasswordMatcher passwordMatcher = new PasswordMatcher();
+//		passwordMatcher.setPasswordService(passwordService);
+//		myRealm3.setPasswordService(passwordService);
+//		myRealm3.setCredentialsMatcher(passwordMatcher);
 		// 凭证匹配器，可以自动识别 SimpleAuthenticationInfo 中的 salt
 		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
 		credentialsMatcher.setHashAlgorithmName("MD5");
