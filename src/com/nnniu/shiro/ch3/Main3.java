@@ -57,7 +57,7 @@ public class Main3 {
 //		DefaultPasswordService passwordService = new DefaultPasswordService();
 //		DefaultHashService hashService = new DefaultHashService();
 //		hashService.setHashAlgorithmName("MD5");
-//		hashService.setPrivateSalt(ByteSource.Util.bytes(""));
+////		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
 //		// 不知道下面两行代码的作用，所以先注释掉
 //		hashService.setGeneratePublicSalt(true);
 //		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
@@ -69,6 +69,7 @@ public class Main3 {
 //		passwordMatcher.setPasswordService(passwordService);
 //		myRealm3.setPasswordService(passwordService);
 //		myRealm3.setCredentialsMatcher(passwordMatcher);
+		
 		// 凭证匹配器，可以自动识别 SimpleAuthenticationInfo 中的 salt
 		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
 		credentialsMatcher.setHashAlgorithmName("MD5");

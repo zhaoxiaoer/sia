@@ -15,6 +15,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Hash;
+import org.apache.shiro.crypto.hash.HashRequest;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -43,6 +45,20 @@ public class MyRealm3 extends AuthorizingRealm {
 		
 		String username = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
+		
+//		HashRequest request = new HashRequest.Builder()
+//				.setSource(ByteSource.Util.bytes(password))
+//				.setIterations(1).build();
+//		Hash hash = ((DefaultPasswordService) passwordService).getHashService().computeHash(request);
+//		Hash hash = ((DefaultPasswordService) passwordService).hashPassword(password);
+//		String pubSalt = hash.getSalt().toHex();
+//		String secPwd = hash.toHex();
+//		logger.debug("secPwd: " + secPwd + ", pubSalt: " + pubSalt);
+//		String md5Pwd = new Md5Hash(password, pubSalt).toHex();
+//		logger.debug("md5Pwd: " + md5Pwd);
+//		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
+//				username + "@qq.com", secPwd, hash.getSalt(), getName());
+//		return simpleAuthenticationInfo;
 		
 //		RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 //		String pubSalt = randomNumberGenerator.nextBytes().toHex();
