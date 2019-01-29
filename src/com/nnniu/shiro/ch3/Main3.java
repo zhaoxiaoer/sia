@@ -57,8 +57,7 @@ public class Main3 {
 //		DefaultPasswordService passwordService = new DefaultPasswordService();
 //		DefaultHashService hashService = new DefaultHashService();
 //		hashService.setHashAlgorithmName("MD5");
-////		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
-//		// 不知道下面两行代码的作用，所以先注释掉
+//		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
 //		hashService.setGeneratePublicSalt(true);
 //		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
 //		hashService.setHashIterations(1);
