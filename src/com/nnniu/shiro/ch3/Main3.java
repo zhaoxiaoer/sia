@@ -53,28 +53,28 @@ public class Main3 {
 		
 		// 配置realm
 		MyRealm3 myRealm3 = new MyRealm3();
-//		// 密码服务
-//		DefaultPasswordService passwordService = new DefaultPasswordService();
-//		DefaultHashService hashService = new DefaultHashService();
-//		hashService.setHashAlgorithmName("MD5");
-//		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
-//		hashService.setGeneratePublicSalt(true);
-//		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
-//		hashService.setHashIterations(1);
-//		passwordService.setHashService(hashService);
-//		passwordService.setHashFormat(new HexFormat());
-//		passwordService.setHashFormatFactory(new DefaultHashFormatFactory());
-//		PasswordMatcher passwordMatcher = new PasswordMatcher();
-//		passwordMatcher.setPasswordService(passwordService);
-//		myRealm3.setPasswordService(passwordService);
-//		myRealm3.setCredentialsMatcher(passwordMatcher);
+		// 密码服务
+		DefaultPasswordService passwordService = new DefaultPasswordService();
+		DefaultHashService hashService = new DefaultHashService();
+		hashService.setHashAlgorithmName("MD5");
+		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
+		hashService.setGeneratePublicSalt(true);
+		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
+		hashService.setHashIterations(1);
+		passwordService.setHashService(hashService);
+		passwordService.setHashFormat(new HexFormat());
+		passwordService.setHashFormatFactory(new DefaultHashFormatFactory());
+		PasswordMatcher passwordMatcher = new PasswordMatcher();
+		passwordMatcher.setPasswordService(passwordService);
+		myRealm3.setPasswordService(passwordService);
+		myRealm3.setCredentialsMatcher(passwordMatcher);
 		
-		// 凭证匹配器，可以自动识别 SimpleAuthenticationInfo 中的 salt
-		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-		credentialsMatcher.setHashAlgorithmName("MD5");
-		credentialsMatcher.setHashIterations(1);
-		// 设置Realm的凭证匹配器
-		myRealm3.setCredentialsMatcher(credentialsMatcher);
+//		// 凭证匹配器，可以自动识别 SimpleAuthenticationInfo 中的 salt
+//		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+//		credentialsMatcher.setHashAlgorithmName("MD5");
+//		credentialsMatcher.setHashIterations(1);
+//		// 设置Realm的凭证匹配器
+//		myRealm3.setCredentialsMatcher(credentialsMatcher);
 		
 		// 设置Realm
 		securityManager.setRealm(myRealm3);

@@ -52,20 +52,24 @@ public class MyRealm3 extends AuthorizingRealm {
 //				.setSource(ByteSource.Util.bytes(password))
 //				.setIterations(1).build();
 //		Hash hash = ((DefaultPasswordService) passwordService).getHashService().computeHash(request);
-//		Hash hash = ((DefaultPasswordService) passwordService).hashPassword(password);
-//		String pubSalt = hash.getSalt().toHex();
-//		String secPwd = hash.toHex();
-//		logger.debug("secPwd: " + secPwd + ", pubSalt: " + pubSalt);
-//		
-//		String salt2 = Hex.decode(pubSalt).toString();
-//		String md5Pwd = new Md5Hash(password, "mm" + hash.getSalt()).toHex();
-//		logger.debug("salt2: " + salt2 + "md5Pwd: " + md5Pwd);
-//		
-//		SimpleHash hash2 = new SimpleHash("MD5");
-//		hash2.setBytes(Hex.decode(secPwd));
-//		hash2.setSalt(ByteSource.Util.bytes(Hex.decode(pubSalt)));
-//		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username, hash2, getName());
-//		return simpleAuthenticationInfo;
+		Hash hash = ((DefaultPasswordService) passwordService).hashPassword(password);
+		String pubSalt = hash.getSalt().toHex();
+		String secPwd = hash.toHex();
+		logger.debug("secPwd: " + secPwd + ", pubSalt: " + pubSalt);
+		
+//		// 根据公私钥手动MD5原始密码
+//		byte[] priBytes = "mm".getBytes();
+//		byte[] pubBytes = hash.getSalt().getBytes();
+//		byte[] total = new byte[priBytes.length + pubBytes.length];
+//		System.arraycopy(priBytes, 0, total, 0, priBytes.length);
+//		System.arraycopy(pubBytes, 0, total, 0 + priBytes.length, pubBytes.length);
+//		String md5Pwd = new Md5Hash(password, ByteSource.Util.bytes(total)).toHex();
+//		logger.debug("md5Pwd: " + md5Pwd);
+		
+		SimpleHash hash2 = new SimpleHash("MD5");
+		hash2.setBytes(Hex.decode(secPwd));
+		hash2.setSalt(ByteSource.Util.bytes(Hex.decode(pubSalt)));
+		return new SimpleAuthenticationInfo(username, hash2, getName());
 		
 //		RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 //		String pubSalt = randomNumberGenerator.nextBytes().toHex();
@@ -76,18 +80,18 @@ public class MyRealm3 extends AuthorizingRealm {
 //		
 //		return new SimpleAuthenticationInfo(username + "@qq.com", md5Pwd, ByteSource.Util.bytes("" + pubSalt), getName());
 		
-		logger.debug("1111111111111111113: " + username + ", " + password);
-//		return new SimpleAuthenticationInfo(username + "@qq.com", passwordService.encryptPassword(password), getName());
-		String algorithmName = "MD5";
-		String priSalt = "mm";
-		String pubSalt = new SecureRandomNumberGenerator().nextBytes().toHex();
-		String secPwd = new SimpleHash(algorithmName, password, priSalt + pubSalt, 1).toHex();
-		logger.debug("secPwd: " + secPwd + ", public salt: " + pubSalt);
-		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-				username + "@qq.com", secPwd, getName());
-		simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(priSalt + pubSalt));
-		
-		return simpleAuthenticationInfo;
+//		logger.debug("1111111111111111113: " + username + ", " + password);
+////		return new SimpleAuthenticationInfo(username + "@qq.com", passwordService.encryptPassword(password), getName());
+//		String algorithmName = "MD5";
+//		String priSalt = "mm";
+//		String pubSalt = new SecureRandomNumberGenerator().nextBytes().toHex();
+//		String secPwd = new SimpleHash(algorithmName, password, priSalt + pubSalt, 1).toHex();
+//		logger.debug("secPwd: " + secPwd + ", public salt: " + pubSalt);
+//		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
+//				username + "@qq.com", secPwd, getName());
+//		simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(priSalt + pubSalt));
+//		
+//		return simpleAuthenticationInfo;
 	}
 	
 	/**
