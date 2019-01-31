@@ -8,5 +8,7 @@
 			<generator class="native" />
 		</id>
 		<property name="permission" type="string" length="100" unique="true" />
+		<property name="description" type="string" length="100" />
+		<property name="available" type="true_false" />
 	</class>
 </hibernate-mapping>

@@ -9,7 +9,8 @@
 		</id>
 		<property name="username" type="string" length="100" unique="true" />
 		<property name="password" type="string" length="100" />
-		<property name="passwordSalt" type="string" length="100" />
+		<property name="salt" type="string" length="100" />
+		<property name="locked" type="true_false" />
 		<!-- 多对多 -->
 		<set name="roles" table="link_user_role" cascade="all">
 			<key column="userid" />

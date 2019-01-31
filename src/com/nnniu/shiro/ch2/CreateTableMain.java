@@ -24,7 +24,7 @@ public class CreateTableMain {
 			Session session = sessionFactory.openSession();
 			
 			session.beginTransaction();
-			User user = new User("zhao", "123456", "123456");
+			User user = new User("zhao", "123456");
 			session.save(user);
 			session.getTransaction().commit();
 			

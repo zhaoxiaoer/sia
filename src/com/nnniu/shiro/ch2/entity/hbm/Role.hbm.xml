@@ -7,7 +7,9 @@
 		<id name="id" type="long" column="id">
 			<generator class="native" />
 		</id>
-		<property name="roleName" type="string" length="100" unique="true" />
+		<property name="role" type="string" length="100" unique="true" />
+		<property name="description" type="string" length="100" />
+		<property name="available" type="true_false" />
 		<!-- 多对多 -->
 		<set name="permissions" table="link_role_permission" cascade="all">
 			<key column="roleid" />
