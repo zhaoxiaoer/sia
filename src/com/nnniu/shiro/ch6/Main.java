@@ -74,7 +74,7 @@ public class Main {
 		SecurityUtils.setSecurityManager(securityManager);
 		
 		Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken("zhao", "123");
+		UsernamePasswordToken token = new UsernamePasswordToken("zhao", "123456");
 		
 		try {
 			subject.login(token);
