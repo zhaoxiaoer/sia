@@ -1,5 +1,7 @@
 package com.nnniu.shiro.ch2.service;
 
+import java.util.Set;
+
 import com.nnniu.shiro.ch2.entity.User;
 
 public interface UserService {
@@ -38,6 +40,20 @@ public interface UserService {
 	 * @return
 	 */
 	public User findByUsername(String username);
+	
+	/**
+	 * 根据用户名查找其角色
+	 * @param username
+	 * @return
+	 */
+	public Set<String> findRoles(String username);
+	
+	/**
+	 * 根据用户名查找其权限
+	 * @param username
+	 * @return
+	 */
+	public Set<String> findPermissions(String username);
 	
 	// 测试
 	public void testCascade();

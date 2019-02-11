@@ -51,8 +51,8 @@ public class Main2 {
 		
 //		roleService.correlationPermissions(r1.getId(), p1.getId(), p2.getId(), p3.getId());
 		roleService.correlationPermissions(r1.getId(), p1.getId(), p2.getId());
-//		roleService.correlationPermissions(r2.getId(), p2.getId(), p3.getId());
-//		roleService.correlationPermissions(r3.getId(), p1.getId(), p2.getId(), p3.getId());
+		roleService.correlationPermissions(r2.getId(), p2.getId(), p3.getId());
+		roleService.correlationPermissions(r3.getId(), p1.getId(), p2.getId(), p3.getId());
 		
 		roleService.uncorrelationPermissions(r3.getId(), r1.getId(), r2.getId());
 		
@@ -80,7 +80,7 @@ public class Main2 {
 		User user2 = userService.findByUsername("zhao");
 		logger.debug("4: " + user2.toString());
 		
-		userService.testCascade();
+//		userService.testCascade();
 		
 		Dao.close();
 	}

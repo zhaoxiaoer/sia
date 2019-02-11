@@ -86,8 +86,9 @@ public class Main {
 				logger.debug("principal: " + principal);
 			}
 			
-			if (subject.hasRole("管理员")) {
-				logger.debug("管理员");
+			logger.debug("hasRoles:");
+			if (subject.hasRole("admin")) {
+				logger.debug("超级管理员");
 			}
 			if (subject.hasAllRoles(Arrays.asList("管理员", "开发者"))) {
 				logger.debug("管理员，开发者");
@@ -98,8 +99,8 @@ public class Main {
 			
 //			subject.checkRole("项目经理");
 			
-			if (subject.isPermitted("users:delete")) {
-				logger.debug("permitted: users:delete");
+			if (subject.isPermitted("user:create")) {
+				logger.debug("permitted: 用户模块新增");
 			}
 			
 			subject.logout();

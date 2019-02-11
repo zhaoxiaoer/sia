@@ -58,19 +58,24 @@ public class MyRealm extends AuthorizingRealm {
 	public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		logger.debug("22222222222222222222");
 		
-		Iterator iterator = principals.iterator();
-		if (iterator.hasNext()) {
-			String principal = (String) iterator.next();
-			logger.debug("principal--" + principal);
-			if (principal.equals("zhao@qq.com")) {
-				SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-				authorizationInfo.addRole("运维人员");
-				authorizationInfo.addStringPermission("users2:create");
-				return authorizationInfo;
-			}
-		}
-		
-		return null;
+//		Iterator iterator = principals.iterator();
+//		if (iterator.hasNext()) {
+//			String principal = (String) iterator.next();
+//			logger.debug("principal--" + principal);
+//			if (principal.equals("zhao@qq.com")) {
+//				SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+//				authorizationInfo.addRole("运维人员");
+//				authorizationInfo.addStringPermission("users2:create");
+//				return authorizationInfo;
+//			}
+//		}
+//		
+//		return null;
+		String username = (String) principals.getPrimaryPrincipal();
+		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+		authorizationInfo.setRoles(userService.findRoles(username));
+		authorizationInfo.setStringPermissions(userService.findPermissions(username));
+		return authorizationInfo;
 	}
 	
 }

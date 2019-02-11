@@ -1,5 +1,7 @@
 package com.nnniu.shiro.ch2.service.impl;
 
+import java.util.Set;
+
 import org.apache.shiro.codec.Hex;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -57,6 +59,14 @@ public class UserServiceImpl implements UserService {
 	
 	public User findByUsername(String username) {
 		return userDao.findByUsername(username);
+	}
+	
+	public Set<String> findRoles(String username) {
+		return userDao.findRoles(username);
+	}
+	
+	public Set<String> findPermissions(String username) {
+		return userDao.findPermissions(username);
 	}
 	
 	// 测试

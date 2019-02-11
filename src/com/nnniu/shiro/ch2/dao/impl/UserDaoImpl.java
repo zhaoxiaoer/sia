@@ -1,5 +1,6 @@
 package com.nnniu.shiro.ch2.dao.impl;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nnniu.shiro.ch2.dao.MyGlobalException;
 import com.nnniu.shiro.ch2.dao.UserDao;
+import com.nnniu.shiro.ch2.entity.Permission;
 import com.nnniu.shiro.ch2.entity.Role;
 import com.nnniu.shiro.ch2.entity.User;
 
@@ -137,6 +139,49 @@ public class UserDaoImpl extends Dao implements UserDao {
 			User user = (User) q.uniqueResult();
 			commit();
 			return user;
+		} catch (HibernateException e) {
+			rollback();
+			logger.error("FindByUsername error: " + e.toString());
+			return null;
+		}
+	}
+	
+	public Set<String> findRoles(String username) {
+		try {
+			begin();
+			Query q = getSession().createQuery("from User where username = :username");
+			q.setParameter("username", username);
+			User user = (User) q.uniqueResult();
+			Set<Role> roles = user.getRoles();
+			HashSet<String> rolesStr = new HashSet<String>();
+			for (Role role : roles) {
+				rolesStr.add(role.getRole());
+			}
+			commit();
+			return rolesStr;
+		} catch (HibernateException e) {
+			rollback();
+			logger.error("FindByUsername error: " + e.toString());
+			return null;
+		}
+	}
+	
+	public Set<String> findPermissions(String username) {
+		try {
+			begin();
+			Query q = getSession().createQuery("from User where username = :username");
+			q.setParameter("username", username);
+			User user = (User) q.uniqueResult();
+			Set<Role> roles = user.getRoles();
+			HashSet<String> permissionsStr = new HashSet<String>();
+			for (Role role : roles) {
+				Set<Permission> permissions = role.getPermissions();
+				for (Permission permission : permissions) {
+					permissionsStr.add(permission.getPermission());
+				}
+			}
+			commit();
+			return permissionsStr;
 		} catch (HibernateException e) {
 			rollback();
 			logger.error("FindByUsername error: " + e.toString());

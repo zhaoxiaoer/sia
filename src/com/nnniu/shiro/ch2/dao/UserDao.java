@@ -14,8 +14,8 @@ public interface UserDao {
 //	
 	public User findOne(Long userId);
 	public User findByUsername(String username);
-//	public Set<String> findRoles(String username);
-//	public Set<String> findPermissions(String username);
+	public Set<String> findRoles(String username);
+	public Set<String> findPermissions(String username);
 	
 	// 测试级联删除
 	public void testCascade();
