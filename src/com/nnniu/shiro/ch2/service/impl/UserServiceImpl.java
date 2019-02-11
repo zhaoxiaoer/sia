@@ -51,8 +51,17 @@ public class UserServiceImpl implements UserService {
 		userDao.correlationRoles(userId, roleIds);
 	}
 	
+	public void uncorrelationRoles(Long userId, Long... roleIds) {
+		userDao.uncorrelationRoles(userId, roleIds);
+	}
+	
 	public User findByUsername(String username) {
 		return userDao.findByUsername(username);
+	}
+	
+	// 测试
+	public void testCascade() {
+		userDao.testCascade();
 	}
 	
 }

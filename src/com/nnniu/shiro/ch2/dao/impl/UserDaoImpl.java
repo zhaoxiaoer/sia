@@ -1,6 +1,8 @@
 package com.nnniu.shiro.ch2.dao.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nnniu.shiro.ch2.dao.MyGlobalException;
 import com.nnniu.shiro.ch2.dao.UserDao;
+import com.nnniu.shiro.ch2.entity.Role;
 import com.nnniu.shiro.ch2.entity.User;
 
 public class UserDaoImpl extends Dao implements UserDao {
@@ -58,27 +61,38 @@ public class UserDaoImpl extends Dao implements UserDao {
 		
 		try {
 			begin();
-//			Query q = getSession().createSQLQuery("insert into link_user_role(userid, roleid) "
-//					+ "values (:userid, :roleid)");
-//			for (Long roleId : roleIds) {
-//				if (!exists(userId, roleId)) {
-//					q.setParameter("userid", userId);
-//					q.setParameter("roleid", roleId);
-//					q.executeUpdate();
-//				}
-//			}
-		
 			Query q = getSession().createSQLQuery("insert into link_user_role(userid, roleid) "
 					+ "values (:userid, :roleid)");
 			for (Long roleId : roleIds) {
 				if (!exists(userId, roleId)) {
-					logger.debug("11111111111111111111");
 					q.setParameter("userid", userId);
 					q.setParameter("roleid", roleId);
 					q.executeUpdate();
 				}
 			}
-			
+			commit();
+		} catch (HibernateException e) {
+			rollback();
+			logger.error("correlationRoles error: " + e.toString());
+		}
+	}
+	
+	public void uncorrelationRoles(Long userId, Long... roleIds) {
+		if (roleIds == null || roleIds.length == 0) {
+			return;
+		}
+		
+		try {
+			begin();
+			Query q = getSession().createSQLQuery("delete from link_user_role "
+					+ "where userid = :userid and roleid = :roleid");
+			for (Long roleId : roleIds) {
+				if (exists(userId, roleId)) {
+					q.setParameter("userid", userId);
+					q.setParameter("roleid", roleId);
+					q.executeUpdate();
+				}
+			}
 			commit();
 		} catch (HibernateException e) {
 			rollback();
@@ -127,6 +141,27 @@ public class UserDaoImpl extends Dao implements UserDao {
 			rollback();
 			logger.error("FindByUsername error: " + e.toString());
 			return null;
+		}
+	}
+	
+	public void testCascade() {
+		try {
+			begin();
+			Query q = getSession().createQuery("from User where username = :username");
+			q.setParameter("username", "zhao");
+			User user = (User) q.uniqueResult();
+//			Set<Role> roles = user.getRoles();
+//			for (Role role : roles) {
+//				if (role.getRole().equals("user")) {
+//					logger.debug("删除普通管理员");
+//					roles.remove(role);
+//				}
+//			}
+			getSession().delete(user);
+			commit();
+		} catch (HibernateException e) {
+//			rollback();
+			logger.error("testCascade error: " + e.toString());
 		}
 	}
 	

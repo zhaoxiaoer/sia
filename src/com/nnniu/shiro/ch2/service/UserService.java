@@ -26,9 +26,19 @@ public interface UserService {
 	public void correlationRoles(Long userId, Long... roleIds);
 	
 	/**
+	 * 删除用户-角色关系
+	 * @param userId
+	 * @param roleIds
+	 */
+	public void uncorrelationRoles(Long userId, Long... roleIds);
+	
+	/**
 	 * 根据用户名查找用户
 	 * @param username
 	 * @return
 	 */
 	public User findByUsername(String username);
+	
+	// 测试
+	public void testCascade();
 }

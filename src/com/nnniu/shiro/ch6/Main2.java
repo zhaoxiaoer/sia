@@ -3,6 +3,7 @@ package com.nnniu.shiro.ch6;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nnniu.shiro.ch2.dao.impl.Dao;
 import com.nnniu.shiro.ch2.entity.Permission;
 import com.nnniu.shiro.ch2.entity.Role;
 import com.nnniu.shiro.ch2.entity.User;
@@ -48,9 +49,10 @@ public class Main2 {
 		logger.debug("r4: " + r4.toString());
 		roleService.deleteRole(r4.getId());
 		
-		roleService.correlationPermissions(r1.getId(), p1.getId(), p2.getId(), p3.getId());
-		roleService.correlationPermissions(r2.getId(), p2.getId(), p3.getId());
-		roleService.correlationPermissions(r3.getId(), p1.getId(), p2.getId(), p3.getId());
+//		roleService.correlationPermissions(r1.getId(), p1.getId(), p2.getId(), p3.getId());
+		roleService.correlationPermissions(r1.getId(), p1.getId(), p2.getId());
+//		roleService.correlationPermissions(r2.getId(), p2.getId(), p3.getId());
+//		roleService.correlationPermissions(r3.getId(), p1.getId(), p2.getId(), p3.getId());
 		
 		roleService.uncorrelationPermissions(r3.getId(), r1.getId(), r2.getId());
 		
@@ -67,7 +69,20 @@ public class Main2 {
 		logger.debug(user.toString());
 		
 		userService.correlationRoles(u1.getId(), r1.getId());
-		logger.debug(user.toString());
+		logger.debug("1: " + user.toString());
+//		userService.correlationRoles(u1.getId(), r2.getId());
+//		logger.debug("2: " + user.toString());
+//		userService.uncorrelationRoles(u1.getId(), r2.getId());
+//		logger.debug("3: " + user.toString());
+		
+		// 必须关闭会话再重新打开会话，否则对象不会更新
+		Dao.close();
+		User user2 = userService.findByUsername("zhao");
+		logger.debug("4: " + user2.toString());
+		
+		userService.testCascade();
+		
+		Dao.close();
 	}
 	
 }
