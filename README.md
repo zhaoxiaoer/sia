@@ -68,3 +68,5 @@ log4j-core-2.11.1.jar log4j-api-2.11.1.jar
 shiro-core-1.4.0.jar 使用 slf4j 接口 -- slf4j-api-1.8.0-beta2.jar <br />
 其又依赖 commons-beanutils-1.9.3.jar <br />
 slf4j的实现使用 log4j2 -- log4j-slf4j18-impl-2.11.1.jar
+### shiro 网络相关jar包
+shiro-web-1.4.0.jar 通过servlet使用shiro时，需要添加此包
