@@ -13,6 +13,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,9 +65,11 @@ public class LoginServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp")
 				.forward(request, response);
 		} else {
-			long timeout = SecurityUtils.getSubject().getSession().getTimeout();
-			logger.debug("timeout: " + timeout);
-//			SecurityUtils.getSubject().getSession().setTimeout(60000L);
+			Session session = SecurityUtils.getSubject().getSession();
+			logger.debug("id: " + session.getId());
+			logger.debug("host: " + session.getHost());
+			logger.debug("timeout: " + session.getTimeout());
+//			session.setTimeout(60000L);
 			
 			request.setAttribute("subject", subject);
 			request.getRequestDispatcher("/WEB-INF/jsp/loginSuccess.jsp")
