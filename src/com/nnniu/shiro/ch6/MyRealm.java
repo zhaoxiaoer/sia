@@ -8,10 +8,16 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.codec.Hex;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.crypto.hash.format.DefaultHashFormatFactory;
+import org.apache.shiro.crypto.hash.format.HexFormat;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -26,6 +32,23 @@ public class MyRealm extends AuthorizingRealm {
 	
 	private static Logger logger = LoggerFactory.getLogger(MyRealm.class);
 	private UserService userService = new UserServiceImpl();
+	
+	public MyRealm() {
+		// 密码服务
+		DefaultPasswordService passwordService = new DefaultPasswordService();
+		DefaultHashService hashService = new DefaultHashService();
+		hashService.setHashAlgorithmName("MD5");
+		hashService.setPrivateSalt(ByteSource.Util.bytes("mm"));
+		hashService.setGeneratePublicSalt(true);
+		hashService.setRandomNumberGenerator(new SecureRandomNumberGenerator());
+		hashService.setHashIterations(1);
+		passwordService.setHashService(hashService);
+		passwordService.setHashFormat(new HexFormat());
+		passwordService.setHashFormatFactory(new DefaultHashFormatFactory());
+		PasswordMatcher passwordMatcher = new PasswordMatcher();
+		passwordMatcher.setPasswordService(passwordService);
+		setCredentialsMatcher(passwordMatcher);
+	}
 
 	/**
 	 * 认证
