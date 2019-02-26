@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.shiro.ch2.entity.Permission" table="permissions">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="permission" type="string" length="100" unique="true" />
+		<property name="description" type="string" length="100" />
+		<property name="available" type="true_false" />
+	</class>
+</hibernate-mapping>

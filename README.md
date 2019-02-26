@@ -62,7 +62,7 @@ hibernate-commons-annotations-5.0.4.Final.jar <br />
 antlr-2.7.7.jar <br />
 
 ### log4j 相关jar包
-log4j-core-2.11.1.jar log4j-api-2.11.1.jar
+log4j-core-2.11.1.jar log4j-api-2.11.1.jar log4j-web-2.11.1.jar(不加这个包的话，tomcat停止时出错)
 
 ### shiro 相关jar包
 shiro-core-1.4.0.jar 使用 slf4j 接口 -- slf4j-api-1.8.0-beta2.jar <br />
