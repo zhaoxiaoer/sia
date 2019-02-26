@@ -3,12 +3,17 @@ package com.nnniu.shiro.ch12;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.nnniu.shiro.ch12.service.PermissionService;
+import com.nnniu.shiro.ch12.entity.Permission;
 
 @Controller
 public class Analysis implements ApplicationContextAware {
@@ -41,6 +46,19 @@ public class Analysis implements ApplicationContextAware {
 		
 		
 		return builder.toString();
+	}
+	
+	@Autowired
+	private PermissionService permissionService;
+	
+	private int a;
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/test", produces = "text/plain; charset=UTF-8")
+	@ResponseBody
+	public String test() {
+		permissionService.test();
+		
+		return "test";
 	}
 
 }

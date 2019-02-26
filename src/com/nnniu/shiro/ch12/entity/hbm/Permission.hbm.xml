@@ -3,7 +3,7 @@
 	"-//Hibernate/Hibernate Mapping DTD//EN"
 	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.nnniu.shiro.ch2.entity.Permission" table="permissions">
+	<class name="com.nnniu.shiro.ch12.entity.Permission" table="permissions">
 		<id name="id" type="long" column="id">
 			<generator class="native" />
 		</id>
