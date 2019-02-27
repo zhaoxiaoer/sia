@@ -25,6 +25,10 @@ public class PermissionDaoImpl implements PermissionDao {
 	}
 	
 	public void deletePermission(Long permissionId) {
+		Query q1 = sessionFactory.getCurrentSession().createSQLQuery("delete from link_role_permission where permissionid = :permissionid");
+		q1.setParameter("permissionid", permissionId);
+		q1.executeUpdate();
+		
 		Query q2 = sessionFactory.getCurrentSession().createQuery("delete from Permission where id = :id");
 		q2.setParameter("id", permissionId);
 		q2.executeUpdate();

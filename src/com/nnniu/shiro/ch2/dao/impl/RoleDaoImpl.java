@@ -12,7 +12,7 @@ import com.nnniu.shiro.ch2.entity.Role;
 
 public class RoleDaoImpl extends Dao implements RoleDao {
 
-	private Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 	
 	public Role createRole(Role role) {
 		try {

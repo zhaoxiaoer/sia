@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.nnniu.shiro.ch12.entity.Role" table="roles">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="role" type="string" length="100" unique="true" />
+		<property name="description" type="string" length="100" />
+		<property name="available" type="true_false" />
+		<!-- 多对多 -->
+		<set name="permissions" table="link_role_permission" cascade="all">
+			<key column="roleid" />
+			<many-to-many class="com.nnniu.shiro.ch12.entity.Permission"
+				column="permissionid" />
+		</set>
+	</class>
+</hibernate-mapping>

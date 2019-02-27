@@ -7,18 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nnniu.shiro.ch12.service.PermissionService;
-import com.nnniu.shiro.ch12.entity.Permission;
+import com.nnniu.shiro.ch12.service.UserService;
 
 @Controller
 public class Analysis implements ApplicationContextAware {
 	
 	private static Logger logger = LoggerFactory.getLogger(Analysis.class);
+	
+	@Autowired
+	private UserService userService;
 	
 	private ApplicationContext applicationContext;
 	
@@ -47,16 +48,11 @@ public class Analysis implements ApplicationContextAware {
 		
 		return builder.toString();
 	}
-	
-	@Autowired
-	private PermissionService permissionService;
-	
-	private int a;
-	
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/test", produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String test() {
-		permissionService.test();
+		userService.test();
 		
 		return "test";
 	}
