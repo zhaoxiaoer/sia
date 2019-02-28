@@ -15,7 +15,7 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
 	<!-- 启动组件扫描 -->
-	<!-- 该注解除了会注入自定义的Controller, Service, Repository等bean外， 还会注入: -->
+	<!-- 该注解除了会注入自定义的Controller, Service, Repository, Configuration, Bean等bean外， 还会注入: -->
 	<!-- org.springframework.context.annotation.internalConfigurationAnnotationProcessor -->
 	<!-- org.springframework.context.annotation.internalAutowiredAnnotationProcessor -->
 	<!-- org.springframework.context.annotation.internalCommonAnnotationProcessor -->

@@ -2,9 +2,12 @@ package com.nnniu.shiro.ch12.service.impl;
 
 import java.util.Set;
 
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.codec.Hex;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
@@ -28,6 +31,8 @@ public class UserServiceImpl implements UserService {
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Autowired
+	private PasswordService passwordService;
+	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private PermissionService permissionService;
@@ -37,15 +42,9 @@ public class UserServiceImpl implements UserService {
 	private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 
 	public User createUser(User user) {
-		byte[] priSaltBytes = "mm".getBytes();
-		ByteSource pubByteSource = randomNumberGenerator.nextBytes();
-		byte[] pubSaltBytes = pubByteSource.getBytes();
-		byte[] total = new byte[priSaltBytes.length + pubSaltBytes.length];
-		System.arraycopy(priSaltBytes, 0, total, 0, priSaltBytes.length);
-		System.arraycopy(pubSaltBytes, 0, total, priSaltBytes.length, pubSaltBytes.length);
-		String secPwd = new Md5Hash(user.getPassword(), ByteSource.Util.bytes(total)).toHex();
-		user.setSalt(pubByteSource.toHex());
-		user.setPassword(secPwd);
+		Hash hash = ((DefaultPasswordService) passwordService).hashPassword(user.getPassword());
+		user.setSalt(hash.getSalt().toHex());
+		user.setPassword(hash.toHex());
 		return userDao.createUser(user);
 	}
 	
@@ -55,15 +54,9 @@ public class UserServiceImpl implements UserService {
 			return;
 		}
 		
-		byte[] priSaltBytes = "mm".getBytes();
-		ByteSource pubByteSource = randomNumberGenerator.nextBytes();
-		byte[] pubSaltBytes = pubByteSource.getBytes();
-		byte[] total = new byte[priSaltBytes.length + pubSaltBytes.length];
-		System.arraycopy(priSaltBytes, 0, total, 0, priSaltBytes.length);
-		System.arraycopy(pubSaltBytes, 0, total, priSaltBytes.length, pubSaltBytes.length);
-		String secPwd = new Md5Hash(newPassword, ByteSource.Util.bytes(total)).toHex();
-		user.setSalt(pubByteSource.toHex());
-		user.setPassword(secPwd);
+		Hash hash = ((DefaultPasswordService) passwordService).hashPassword(newPassword);
+		user.setSalt(hash.getSalt().toHex());
+		user.setPassword(hash.toHex());
 		userDao.updateUser(user);
 	}
 	
