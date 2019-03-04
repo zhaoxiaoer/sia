@@ -37,7 +37,8 @@
 	</bean>
 	
 	<!-- 凭证匹配器 -->
-	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher">
+	<bean id="credentialsMatcher" class="com.nnniu.shiro.ch12.credentials.RetryLimitPasswordMatcher">
+		<constructor-arg ref="cacheManager"/>
 		<property name="passwordService" ref="passwordService"></property>
 	</bean>
 	

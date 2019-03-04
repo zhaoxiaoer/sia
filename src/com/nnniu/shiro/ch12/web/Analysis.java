@@ -52,6 +52,7 @@ public class Analysis implements ApplicationContextAware {
 	@RequestMapping(method = RequestMethod.GET, value = "/test", produces = "text/plain; charset=UTF-8")
 	@ResponseBody
 	public String test() {
+		// 测试用户添加，删除等
 		userService.test();
 		
 		return "test";

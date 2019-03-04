@@ -15,8 +15,20 @@
     	diskExpiryThreadIntervalSeconds="120"    
     	memoryStoreEvictionPolicy="LFU"/>
     	
+    <!-- 登录记录缓存，登录失败次数过多，锁定1小时 -->
+    <cache
+    	name="passwordRetryCache"
+    	maxEntriesLocalHeap="2000"
+    	eternal="false"
+    	timeToIdleSeconds="360"
+    	timeToLiveSeconds="0"
+    	overflowToDisk="false"
+    	statistics="true">
+    </cache>
+
+	<!-- 认证信息缓存 -->
     <cache 
-    	name="authorizationCache"
+    	name="authenticationCache"
     	maxEntriesLocalHeap="2000"
     	eternal="false"
     	timeToIdleSeconds="3600"
@@ -24,9 +36,10 @@
     	overflowToDisk="false"
     	statistics="true">
     </cache>
-
+    
+    <!-- 授权信息缓存 -->
     <cache 
-    	name="authenticationCache"
+    	name="authorizationCache"
     	maxEntriesLocalHeap="2000"
     	eternal="false"
     	timeToIdleSeconds="3600"
