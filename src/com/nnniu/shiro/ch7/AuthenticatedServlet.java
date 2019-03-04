@@ -13,7 +13,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebServlet(name="authenticatedServlet", urlPatterns="/authenticated")
+//@WebServlet(name="authenticatedServlet", urlPatterns="/authenticated")
 public class AuthenticatedServlet extends HttpServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(RoleServlet.class);

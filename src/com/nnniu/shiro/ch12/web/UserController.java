@@ -72,4 +72,48 @@ public class UserController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/logout")
+	public ModelAndView logout() {
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("logoutSuccess");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/role")
+	public ModelAndView role() {
+		ModelAndView modelAndView = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		modelAndView.addObject("subject", subject);
+		modelAndView.setViewName("hasRole");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/permission")
+	public ModelAndView permission() {
+		ModelAndView modelAndView = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		modelAndView.addObject("subject", subject);
+		modelAndView.setViewName("hasPermission");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/authenticated")
+	public ModelAndView authenticated() {
+		ModelAndView modelAndView = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		modelAndView.addObject("subject", subject);
+		modelAndView.setViewName("authenticated");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/unauthorized")
+	public ModelAndView unauthorized() {
+		ModelAndView modelAndView = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		modelAndView.addObject("subject", subject);
+		modelAndView.setViewName("unauthorized");
+		return modelAndView;
+	}
 }
