@@ -1,4 +1,4 @@
-package com.nnniu.shiro.ch12.web;
+package com.nnniu.shiro.ch12.web.mvc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

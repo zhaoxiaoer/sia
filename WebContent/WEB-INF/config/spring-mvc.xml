@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd 
@@ -12,7 +13,9 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	http://www.springframework.org/schema/tx
-	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
 	
 	<!-- 启动组件扫描 -->
 	<!-- 该注解除了会注入自定义的Controller, Service, Repository, Configuration, Bean等bean外， 还会注入: -->
@@ -24,10 +27,18 @@
 	<!-- org.springframework.context.event.internalEventListenerFactory -->
 	<context:component-scan base-package="com.nnniu.shiro.ch12.web"></context:component-scan>
 	
+	<!-- 开启shiro权限注解的支持 -->
+	<!-- 该注解会注入: -->
+	<!-- org.springframework.aop.config.internalAutoProxyCreator -->
+	<aop:config proxy-target-class="true"></aop:config>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+	
 	<!-- 默认的视图解析器 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-       
+    
 </beans>

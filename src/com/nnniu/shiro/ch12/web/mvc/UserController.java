@@ -1,4 +1,4 @@
-package com.nnniu.shiro.ch12.web;
+package com.nnniu.shiro.ch12.web.mvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,6 +7,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +115,22 @@ public class UserController {
 		Subject subject = SecurityUtils.getSubject();
 		modelAndView.addObject("subject", subject);
 		modelAndView.setViewName("unauthorized");
+		return modelAndView;
+	}
+	
+//	@RequiresAuthentication
+	@RequestMapping(method = RequestMethod.GET, value = "/register")
+	public ModelAndView registerGet() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("register");
+		return modelAndView;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/register")
+	public ModelAndView registerPost(String username, String password) {
+		logger.debug("username: " + username + ", password: " + password);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("register");
 		return modelAndView;
 	}
 }

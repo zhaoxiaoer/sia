@@ -7,6 +7,6 @@
 <title>授权</title>
 </head>
 <body>
-<p>${subject.principal}没有授权</p>
+<p>${subject.principal}没有授权 ${exception.message}</p>
 </body>
 </html>

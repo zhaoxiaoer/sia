@@ -12,6 +12,7 @@
 <a href="${pageContext.request.contextPath}/authenticated">已身份认证</a>
 <a href="${pageContext.request.contextPath}/role">角色授权</a>
 <a href="${pageContext.request.contextPath}/permission">权限授权</a>
+<a href="${pageContext.request.contextPath}/register">注册</a>
 
 </body>
 </html>

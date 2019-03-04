@@ -75,3 +75,6 @@ shiro-ehcache-1.4.0.jar ehcache-2.10.6.jar commons-collections-3.2.2.jar
 
 ### shiro与spring的集成
 shiro-spring-1.4.0.jar
+
+### shiro注解相关jar包
+shiro注解需要aspectjweaver-1.9.2.jar包
