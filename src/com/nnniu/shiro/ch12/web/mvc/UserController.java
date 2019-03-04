@@ -11,16 +11,23 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.nnniu.shiro.ch12.entity.User;
+import com.nnniu.shiro.ch12.service.UserService;
+
 @Controller
 public class UserController {
 	
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/", produces = "text/plain; charset=UTF-8")
 	public ModelAndView index() {
@@ -130,7 +137,15 @@ public class UserController {
 	public ModelAndView registerPost(String username, String password) {
 		logger.debug("username: " + username + ", password: " + password);
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("register");
+		if (username == null || username.equals("") 
+				|| password == null || password.equals("")) {
+			modelAndView.addObject("error", "用户名或密码不能为空");
+			modelAndView.setViewName("register");
+			return modelAndView;
+		}
+		
+		userService.createUser(new User(username, password));
+		modelAndView.setViewName("registerSuccess");
 		return modelAndView;
 	}
 }
