@@ -72,3 +72,6 @@ slf4j的实现使用 log4j2 -- log4j-slf4j18-impl-2.11.1.jar
 shiro-web-1.4.0.jar 通过servlet使用shiro时，需要添加此包
 ### shiro ehcache相关jar包
 shiro-ehcache-1.4.0.jar ehcache-2.10.6.jar commons-collections-3.2.2.jar
+
+### shiro与spring的集成
+shiro-spring-1.4.0.jar

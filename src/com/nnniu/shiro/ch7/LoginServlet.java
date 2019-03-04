@@ -18,7 +18,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebServlet(name="loginServlet", urlPatterns="/login")
+//@WebServlet(name="loginServlet", urlPatterns="/login")
 public class LoginServlet extends HttpServlet {
 
 	private static Logger logger = LoggerFactory.getLogger(LoginServlet.class);

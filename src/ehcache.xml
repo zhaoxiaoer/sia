@@ -14,6 +14,26 @@
     	diskSpoolBufferSizeMB="50"    
     	diskExpiryThreadIntervalSeconds="120"    
     	memoryStoreEvictionPolicy="LFU"/>
+    	
+    <cache 
+    	name="authorizationCache"
+    	maxEntriesLocalHeap="2000"
+    	eternal="false"
+    	timeToIdleSeconds="3600"
+    	timeToLiveSeconds="0"
+    	overflowToDisk="false"
+    	statistics="true">
+    </cache>
+
+    <cache 
+    	name="authenticationCache"
+    	maxEntriesLocalHeap="2000"
+    	eternal="false"
+    	timeToIdleSeconds="3600"
+    	timeToLiveSeconds="0"
+    	overflowToDisk="false"
+    	statistics="true">
+    </cache>
 	
 	<cache name="shiro-activeSessionCache"
 		maxEntriesLocalHeap="10000"
@@ -22,6 +42,7 @@
 		diskPersistent="false"
 		timeToLiveSeconds="0"
 		timeToIdleSeconds="1800"
-		statistics="true"/>
+		statistics="true">
+	</cache>
 
 </ehcache>

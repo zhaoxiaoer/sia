@@ -13,7 +13,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@WebServlet(name="logoutServlet", urlPatterns="/logout")
+//@WebServlet(name="logoutServlet", urlPatterns="/logout")
 public class LogoutServlet extends HttpServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(LogoutServlet.class);

@@ -22,19 +22,12 @@
 	<!-- org.springframework.context.annotation.internalPersistenceAnnotationProcessor -->
 	<!-- org.springframework.context.event.internalEventListenerProcessor -->
 	<!-- org.springframework.context.event.internalEventListenerFactory -->
-	<context:component-scan base-package="com.nnniu.shiro.ch12"></context:component-scan>
+	<context:component-scan base-package="com.nnniu.shiro.ch12.web"></context:component-scan>
 	
-	<!-- 配置spring事务 -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	<!-- 开启事务注解 -->
-	<!-- 该注解会注入beans: -->
-	<!-- org.springframework.transaction.config.internalTransactionalEventListenerFactory -->
-	<!-- org.springframework.aop.config.internalAutoProxyCreator -->
-	<!-- org.springframework.transaction.annotation.AnnotationTransactionAttributeSource#0 -->
-	<!-- org.springframework.transaction.interceptor.TransactionInterceptor#0 -->
-	<!-- org.springframework.transaction.config.internalTransactionAdvisor -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 默认的视图解析器 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
        
 </beans>

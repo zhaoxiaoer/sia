@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
-@WebServlet(name = "permissionServlet", urlPatterns = "/permission")
+//@WebServlet(name = "permissionServlet", urlPatterns = "/permission")
 public class PermissionServlet extends HttpServlet {
 
 	@Override
