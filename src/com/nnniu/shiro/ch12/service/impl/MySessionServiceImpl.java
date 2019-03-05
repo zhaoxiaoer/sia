@@ -22,6 +22,7 @@ public class MySessionServiceImpl implements MySessionService {
 	public void updateMySession(MySession mySession) {
 		mySessionDao.updateMySession(mySession);
 	}
+	
 	public void deleteMySession(MySession mySession) {
 		mySessionDao.deleteMySession(mySession);
 	}

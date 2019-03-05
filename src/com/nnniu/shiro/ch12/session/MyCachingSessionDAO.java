@@ -13,9 +13,9 @@ import com.nnniu.shiro.ch12.entity.MySession;
 import com.nnniu.shiro.ch12.service.MySessionService;
 import com.nnniu.shiro.ch12.service.impl.SerializableUtils;
 
-public class MySessionDAO extends CachingSessionDAO {
+public class MyCachingSessionDAO extends CachingSessionDAO {
 
-	private static Logger logger = LoggerFactory.getLogger(MySessionDAO.class);
+	private static Logger logger = LoggerFactory.getLogger(MyCachingSessionDAO.class);
 	
 	@Autowired
 	private MySessionService mySessionService;

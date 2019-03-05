@@ -21,7 +21,9 @@ public class MySessionDaoImpl implements MySessionDao {
 
 	@Override
 	public MySession createMySession(MySession mySession) {
+		logger.debug("mySession: " + mySession.toString());
 		sessionFactory.getCurrentSession().save(mySession);
+		logger.debug("mySession2: " + mySession.toString());
 		return mySession;
 	}
 
@@ -31,6 +33,7 @@ public class MySessionDaoImpl implements MySessionDao {
 		Query q = session.createQuery("from MySession where sessionId = :sessionId");
 		q.setParameter("sessionId", mySession.getSessionId());
 		MySession mySession2 = (MySession) q.uniqueResult();
+		logger.debug("mySession2: " + mySession2.toString());
 		mySession2.setSessionValue(mySession.getSessionValue());
 	}
 

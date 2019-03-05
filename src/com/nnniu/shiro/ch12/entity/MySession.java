@@ -60,7 +60,8 @@ public class MySession {
 	@Override
 	public String toString() {
 		return "Sessions{" +
-				"sessionId='" + sessionId + "'" + 
+				"id=" + id + 
+				", sessionId='" + sessionId + "'" + 
 				", sessionValue='" + sessionValue + "'" +
 				"}";
 	}
