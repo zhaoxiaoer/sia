@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
@@ -55,10 +56,16 @@ public class UserController {
 		String exceptionClassName = (String) request.getAttribute("shiroLoginFailure");
 		String error = null;
 		if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
+			// UserRealm抛出该异常
 			error = "用户名或密码错误";
+		} else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
+			// UserRealm抛出该异常
+			error = "账户被锁定";
 		} else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
+			// PasswordMatcher抛出该异常
 			error = "用户名或密码错误";
 		} else if (ExcessiveAttemptsException.class.getName().equals(exceptionClassName)) {
+			// RetryLimitPasswordMatcher抛出该异常
 			error = "登录失败多次，账户锁定60分钟";
 		} else if (exceptionClassName != null) {
 			error = "用户名或密码错误";
