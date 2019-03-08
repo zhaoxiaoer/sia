@@ -13,6 +13,7 @@
 <a href="${pageContext.request.contextPath}/role">角色授权</a>
 <a href="${pageContext.request.contextPath}/permission">权限授权</a>
 <a href="${pageContext.request.contextPath}/register">注册</a>
+<a href="${pageContext.request.contextPath}/profile">设置</a>
 
 </body>
 </html>

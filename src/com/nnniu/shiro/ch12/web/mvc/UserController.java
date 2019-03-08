@@ -148,4 +148,13 @@ public class UserController {
 		modelAndView.setViewName("registerSuccess");
 		return modelAndView;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/profile")
+	public ModelAndView profileGet() {
+		ModelAndView mv = new ModelAndView();
+		Subject subject = SecurityUtils.getSubject();
+		mv.addObject("subject", subject);
+		mv.setViewName("profile");
+		return mv;
+	}
 }
