@@ -38,11 +38,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
-	public ModelAndView loginGet() {
+	public ModelAndView loginGet(String kickout) {
 		ModelAndView modelAndView = new ModelAndView();
 		Subject subject = SecurityUtils.getSubject();
 		if (!subject.isAuthenticated()) {
 			modelAndView.setViewName("login");
+			if (kickout != null && kickout.equals("1")) {
+				logger.debug("kickout: " + kickout);
+				modelAndView.addObject("error", "您被踢出登录");
+			}
 		} else {
 			modelAndView.addObject("subject", subject);
 			modelAndView.setViewName("loginSuccess");

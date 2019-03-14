@@ -49,13 +49,24 @@
     </cache>
 	
 	<!-- session信息缓存 -->
-	<cache name="shiro-activeSessionCache"
-		maxEntriesLocalHeap="10000"
+	<cache 
+		name="shiro-activeSessionCache"
+		maxEntriesLocalHeap="2000"
 		overflowToDisk="false"
 		eternal="false"
 		diskPersistent="false"
+		timeToIdleSeconds="3600"
 		timeToLiveSeconds="0"
-		timeToIdleSeconds="1800"
+		statistics="true">
+	</cache>
+	
+	<cache
+		name="shiro-kickout-session"
+		maxEntriesLocalHeap="2000"
+		eternal="false"
+		timeToIdleSeconds="3600"
+		timeToLiveSeconds="0"
+		overflowToDisk="false"
 		statistics="true">
 	</cache>
 

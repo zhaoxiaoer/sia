@@ -123,6 +123,14 @@
 		<property name="loginUrl" value="/login"></property>
 	</bean>
 	
+	<bean id="kickoutSessionControlFilter" class="com.nnniu.shiro.ch12.web.shiro.filter.KickoutSessionControlFilter">
+		<property name="kickoutUrl" value="/login?kickout=1"></property>
+		<property name="kickoutAfter" value="false"></property>
+		<property name="maxSession" value="1"></property>
+		<property name="sessionManager" ref="sessionManager"></property>
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+	
 	<!-- Shiro的Web过滤器 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"></property>
@@ -131,6 +139,7 @@
 		<property name="filters">
 			<util:map>
 				<entry key="authc" value-ref="formAuthenticationFilter"></entry>
+				<entry key="kickout" value-ref="kickoutSessionControlFilter"></entry>
 			</util:map>
 		</property>
 		<property name="filterChainDefinitions">
@@ -141,7 +150,7 @@
 				/authenticated=authc
 				/role=authc,roles[admin]
 				/permission=authc,perms[user:create]
-				/profile=user
+				/profile=kickout,user
 			</value>
 		</property>
 	</bean>
