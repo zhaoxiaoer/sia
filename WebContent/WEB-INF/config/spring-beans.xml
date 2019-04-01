@@ -36,7 +36,7 @@
 	<!-- 配置数据源c3p0 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
-		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.19:3306/shiro?useSSL=false"></property>
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.26:3306/shiro?useSSL=false"></property>
 		<property name="user" value="root"></property>
 		<property name="password" value="123456"></property>
 	</bean>
